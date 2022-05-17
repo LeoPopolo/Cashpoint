@@ -1,0 +1,22 @@
+.div-container{
+  box-shadow: 2px 0 15px 2px #70707080;
+  width: 17%;
+  height: 100vh;
+  padding: 1rem 0;
+  h3{
+    padding-bottom:  1rem;
+    text-align: center;
+    font-size: 18px;
+  }
+  div {
+    transition: all 200ms ;
+    width: 100%;
+    padding: 1rem;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 2px 0 15px 1px #70707050;
+      transform: scale(1.1), translateY(-1rem);
+    }
+  }
+}

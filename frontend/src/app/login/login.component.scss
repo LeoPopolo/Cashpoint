@@ -1,0 +1,41 @@
+.for-container{
+  display: flex;
+  align-items: center;
+  padding: 200px;
+  margin: 0px;
+  justify-content: center;
+  height: 100vh;
+  background-color: #85abf1;
+
+  .div-container {
+    box-shadow: 1px 1px 15px 1px #50505050;
+    padding: 3rem;
+    background-color: #fff;
+
+    div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      input {
+        border-bottom: 1px solid #707070;
+        padding: 1rem;
+      }
+
+      button {
+        margin-top: 1rem;
+        padding: .5rem 1rem;
+        font-size: 1.2rem;
+        border-radius: 5px;
+        color: #fff;
+        background-color: #6495ed;
+        transition: all 200ms ;
+
+        &:hover{
+          cursor: pointer;
+          box-shadow: 1px 1px 15px 2px #ccc;
+        }
+      }
+    }
+  }
+}
