@@ -1,3 +1,5 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
 * {
   padding: 0;
   margin: 0;
@@ -5,4 +7,8 @@
   font-family: sans-serif;
   border: none;
   outline: none;
+}
+
+:root {
+  --primary-color: #85abf1;
 }
