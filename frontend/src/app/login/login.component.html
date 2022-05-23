@@ -1,13 +1,13 @@
-<div class="for-container" >
-  <div class="div-container" >
+<div class="for-container">
+  <div class="div-container">
     <div>
-      <input class="input-user" type="text" placeholder="Usuario"  [(ngModel)]="user">
+      <input class="input-user" type="text" placeholder="Usuario"  [(ngModel)]="user.username">
     </div>
     <div>
-      <input class="input-password" type="text" placeholder="Contraseña" [(ngModel)]="password">
+      <input class="input-password" type="password" placeholder="Contraseña" [(ngModel)]="user.password">
     </div>
     <div>
-      <Button class="btn-login" (click)="login()" >Ingresar</Button>
+      <Button class="btn-login" (click)="validateLogin()" >Ingresar</Button>
     </div>
   </div>
 </div>
