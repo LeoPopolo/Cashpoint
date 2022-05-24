@@ -5,29 +5,34 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MaterialModule } from './shared/material.module';
 import { MatDialogRef } from '@angular/material/dialog';
+import { AuthInterceptor } from './interceptors/AuthInterceptor';
+import { CommonModule } from '@angular/common';
+import { HomeModule } from './home/home.module';
+import { DialogAddEditProductComponent } from './dialogs/dialog-add-edit-product/dialog-add-edit-product.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    DialogAddEditProductComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule,
-    FormsModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    AppRoutingModule,
+    HomeModule
   ],
   providers: [
-    {
-      provide: MatDialogRef,
-      useValue: {}
-    }
+    { provide: MatDialogRef, useValue: {} },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

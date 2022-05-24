@@ -9,5 +9,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatButtonModule,
     MatDialogModule
   ],
+  exports: [
+    MatIconModule,
+    MatButtonModule
+  ]
 })
 export class MaterialModule { }

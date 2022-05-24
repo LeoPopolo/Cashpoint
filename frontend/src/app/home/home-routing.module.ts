@@ -15,19 +15,9 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: '',
-        redirectTo: 'products',
-        pathMatch: 'full',
-      },
-      {
         path: 'sales',
         component: SaleComponent,
         pathMatch: 'full'
-      },
-      {
-        path: '',
-        redirectTo: 'sales',
-        pathMatch: 'full',
       }
     ],
   },

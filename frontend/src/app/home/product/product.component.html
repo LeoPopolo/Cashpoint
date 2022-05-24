@@ -2,6 +2,28 @@
   <h1>Productos</h1>
 
   <div class="buttons-container">
-    <button (click)="openDialogCreateProduct()"> Nuevo producto</button>
+    <button (click)="openDialogCreateProduct()"> <mat-icon>add</mat-icon> Nuevo producto</button>
+    <input type="text" placeholder="Buscar...">
+  </div>
+
+  <div class="table">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Nombre</span>
+      <span>Descripción</span>
+      <span>Precio</span>
+      <span>Stock</span>
+      <span>Código de barras</span>
+    </div>
+    <div class="table-body">
+      <div class="table-body-element" *ngFor="let item of productList">
+        <span>{{item.id}}</span>
+        <span>{{item.name}}</span>
+        <span>{{item.description}}</span>
+        <span>{{item.price}}</span>
+        <span>{{item.stock}}</span>
+        <span>{{item.barcode}}</span>
+      </div>
+    </div>
   </div>
 </main>

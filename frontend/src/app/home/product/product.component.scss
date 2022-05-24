@@ -3,6 +3,8 @@ main {
 
   .buttons-container {
     padding-block: 1em;
+    display: flex;
+    justify-content: space-between;
 
     button {
       background-color: var(--primary-color);
@@ -10,7 +12,61 @@ main {
       padding: .7em 1em;
       font-size: 1.1em;
       color: #fff;
+      box-shadow: 1px 1px 5px 0 #bbb;
       cursor: pointer;
+    }
+
+    input {
+      border-radius: 100px;
+      padding-left: 2em;
+      box-shadow: 1px 1px 5px 0 #bbb;
+      font-size: 1.1em;
+    }
+  }
+
+  .table {
+
+    .table-head {
+      display: grid;
+      grid-template-columns: .5fr repeat(5, 1fr);
+      padding: 1em;
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    .table-body {
+      max-height: 60vh;
+      overflow-y: scroll;
+
+      .table-body-element {
+        display: grid;
+        grid-template-columns: .5fr repeat(5, 1fr);
+        padding: 1em;
+        margin-top: 1em;
+        box-shadow: 1px 1px 5px 0 #bbb;
+      }
+
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+      }
+
+      &::-webkit-scrollbar:vertical {
+        width:2px;
+      }
+
+      &::-webkit-scrollbar-button:increment, &::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 20px;
+        border: 2px solid #f1f2f3;
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
     }
   }
 }
