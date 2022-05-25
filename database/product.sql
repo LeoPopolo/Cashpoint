@@ -1,11 +1,12 @@
 CREATE TABLE product (
-    id              serial,
     name            text NOT NULL,
     description     text,
     price           real NOT NULL,
     stock           int NOT NULL,
     barcode         text,
     deleted         boolean
+) INHERITS (
+	core_object
 );
 
 

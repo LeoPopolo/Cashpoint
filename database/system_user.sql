@@ -1,11 +1,12 @@
 CREATE TABLE system_user (
-    id              serial,
     username        text,
     name            text,
     surname         text,
     email           text,
     role            text,
     password        text
+) INHERITS (
+	core_object
 );
 
 ALTER TABLE system_user

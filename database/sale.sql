@@ -4,13 +4,14 @@ CREATE TYPE sale_item AS (
 );
 
 CREATE TABLE sale (
-    id                  serial,
     products            sale_item[],
     user_owner_id       int,
     total               real,
     payment_method      text,
     status              text,
     discount            real
+) INHERITS (
+	core_object
 );
 
 -- SELECT array_to_json(products) FROM sale;
