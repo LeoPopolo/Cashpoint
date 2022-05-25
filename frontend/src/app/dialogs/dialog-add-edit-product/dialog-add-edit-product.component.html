@@ -1,5 +1,24 @@
 <h1>Nuevo producto</h1>
 
-<div [FormGroup]="addProductForm">
+<form [formGroup]="addProductForm">
+  <div class="input-container">
+    <input type="text" formControlName="name" placeholder="Nombre">
+  </div>
+  <div class="input-container">
+    <input type="text" formControlName="description" placeholder="Descripción">
+  </div>
+  <div class="input-container">
+    <input type="number" formControlName="stock" placeholder="Stock disponible">
+  </div>
+  <div class="input-container">
+    <input type="number" formControlName="price" placeholder="Precio">
+  </div>
+  <div class="input-container">
+    <input type="text" formControlName="barcode" placeholder="Código de barras">
+  </div>
 
-</div>
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="validateForm()" *ngIf="!editBool">Agregar</button>
+    <button class="btn-primary" (click)="saveChanges()" *ngIf="editBool">Guardar cambios</button>
+  </div>
+</form>

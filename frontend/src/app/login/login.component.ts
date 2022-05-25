@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authServices: AuthService
+    private authServices: AuthService,
+    private snackbar: MatSnackBar
   ) {  }
 
   ngOnInit(): void {
@@ -30,7 +32,7 @@ export class LoginComponent implements OnInit {
 
       await this.login();
     } else {
-      alert(" Falta completar campos ");
+      this.openSnackbar(" Falta completar campos ");
     }
   }
 
@@ -48,9 +50,15 @@ export class LoginComponent implements OnInit {
         console.log(err);
 
         if (err.error.error === 'username or password incorrect') {
-          alert('usuario o contraseña incorrectos');
+          this.openSnackbar('usuario o contraseña incorrectos');
         }
       });
   }
 
+  openSnackbar(message: string) {
+    this.snackbar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: 'snack-bar-style'
+    });
+  }
 }

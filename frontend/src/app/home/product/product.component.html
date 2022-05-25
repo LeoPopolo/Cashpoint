@@ -2,8 +2,11 @@
   <h1>Productos</h1>
 
   <div class="buttons-container">
-    <button (click)="openDialogCreateProduct()"> <mat-icon>add</mat-icon> Nuevo producto</button>
-    <input type="text" placeholder="Buscar...">
+    <button (click)="openDialogCreateEditProduct('create')" class="btn-primary"> <mat-icon>add</mat-icon> <span>Nuevo producto</span> </button>
+    <span>
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Buscar...">
+    </span>
   </div>
 
   <div class="table">
@@ -14,15 +17,20 @@
       <span>Precio</span>
       <span>Stock</span>
       <span>Código de barras</span>
+      <span>Acciones</span>
     </div>
     <div class="table-body">
       <div class="table-body-element" *ngFor="let item of productList">
-        <span>{{item.id}}</span>
+        <span>#{{item.id}}</span>
         <span>{{item.name}}</span>
         <span>{{item.description}}</span>
-        <span>{{item.price}}</span>
+        <span>${{item.price}}</span>
         <span>{{item.stock}}</span>
         <span>{{item.barcode}}</span>
+        <span class="actions-element">
+          <mat-icon (click)="openDialogCreateEditProduct('edit', item.id)">edit</mat-icon>
+          <mat-icon (click)="openDialogDelete(item.id, item.name)">delete</mat-icon>
+        </span>
       </div>
     </div>
   </div>

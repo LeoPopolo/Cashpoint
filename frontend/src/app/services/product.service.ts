@@ -23,12 +23,83 @@ export class ProductService {
   async createProduct(data: Product) {
 
     const headers = new HttpHeaders({
-      'Content-type': 'application/json'
+      'Content-Type': 'application/json'
     });
 
-    delete data.id;
-
     const response: any = await this.httpClient.post<any>(`${this.endpoint}/api/product`, data, {headers: headers}).toPromise();
+
+    return response;
+  }
+
+  async identifyById(id: number) {
+
+    const response: any = await this.httpClient.get<any>(`${this.endpoint}/api/product/${id}`).toPromise();
+
+    return response;
+  }
+
+  async setName(id: number, name: string) {
+
+    const body = {
+      name: name
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/name/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async setDescription(id: number, description: string) {
+
+    const body = {
+      description: description
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/description/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async setPrice(id: number, price: number) {
+
+    const body = {
+      price: price
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/price/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async setStock(id: number, stock: number) {
+
+    const body = {
+      stock: stock
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/stock/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async setBarcode(id: number, barcode: string) {
+
+    const body = {
+      barcode: barcode
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/barcode/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async deleteProduct(id: number) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'text/plain'
+    });
+
+    const response: any = await this.httpClient.delete<any>(`${this.endpoint}/api/product/${id}`).toPromise();
 
     return response;
   }

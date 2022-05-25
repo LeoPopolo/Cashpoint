@@ -38,7 +38,6 @@ exports.createProduct = createProduct;
 ;
 function getProducts(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var productsArray = [];
         yield database_1.default.query(`SELECT id, name, description, price, stock, barcode
                         FROM product
                         WHERE deleted = FALSE
@@ -53,7 +52,7 @@ function getProducts(req, res) {
                 });
             }
             else {
-                productsArray = resp.rows;
+                const productsArray = resp.rows;
                 res.status(200).json({
                     status: 'OK',
                     data: productsArray
@@ -78,7 +77,7 @@ function identifyById(req, res) {
                 });
             }
             else {
-                let product = resp.rows;
+                const product = resp.rows[0];
                 res.status(200).json({
                     status: 'OK',
                     data: product

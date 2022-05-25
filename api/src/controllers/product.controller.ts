@@ -25,7 +25,6 @@ export async function createProduct(req: Request, res: Response) {
 };
 
 export async function getProducts(req: Request, res: Response) {
-    var productsArray = [];
 
     await conn.query(`SELECT id, name, description, price, stock, barcode
                         FROM product
@@ -41,7 +40,7 @@ export async function getProducts(req: Request, res: Response) {
                 error: 'No data found'
             });
         } else {
-            productsArray = (resp as any).rows;
+            const productsArray = (resp as any).rows;
     
             res.status(200).json({
                 status: 'OK',
@@ -66,7 +65,7 @@ export async function identifyById(req: Request, res: Response) {
                 error: 'No data found'
             });
         } else {
-            let product = (resp as any).rows;
+            const product = (resp as any).rows[0];
     
             res.status(200).json({
                 status: 'OK',

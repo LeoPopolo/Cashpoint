@@ -1,14 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
   border: none;
   outline: none;
 }
 
 :root {
   --primary-color: #85abf1;
+  --secondary-color: #80fdde;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-radius: 100px;
+  padding: .7em 1em;
+  font-size: 1.1em;
+  color: #fff;
+  box-shadow: 1px 1px 5px 0 #bbb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border-radius: 100px;
+  padding: .7em 1em;
+  font-size: 1.1em;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  box-shadow: 1px 1px 5px 0 #bbb;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.snack-bar-style{
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.snack-bar-style button {
+  color: var(--secondary-color);
 }

@@ -12,12 +12,14 @@ import { AuthInterceptor } from './interceptors/AuthInterceptor';
 import { CommonModule } from '@angular/common';
 import { HomeModule } from './home/home.module';
 import { DialogAddEditProductComponent } from './dialogs/dialog-add-edit-product/dialog-add-edit-product.component';
+import { DialogConfirmComponent } from './dialogs/dialog-confirm/dialog-confirm.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DialogAddEditProductComponent
+    DialogAddEditProductComponent,
+    DialogConfirmComponent
   ],
   imports: [
     CommonModule,
