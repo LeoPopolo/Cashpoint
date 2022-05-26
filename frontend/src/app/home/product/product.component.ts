@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm/dialog-confirm.component';
 import { ProductService } from 'src/app/services/product.service';
@@ -11,6 +11,7 @@ export class Product {
   description: string = '';
   price: number = 0;
   stock: number = 0;
+  brand: string = '';
   barcode: string = '';
 }
 
@@ -23,6 +24,19 @@ export class ProductComponent implements OnInit {
 
   productList: Array<Product> = [];
 
+  filterData = {
+    page: 1,
+    name: null,
+    brand: null,
+    barcode: null
+  }
+
+  searchInfo = {
+    totalPages: 1
+  }
+
+  filterOpened: boolean = false;
+
   constructor(
     private dialog: MatDialog,
     private productServices: ProductService,
@@ -34,8 +48,9 @@ export class ProductComponent implements OnInit {
   }
 
   async getProducts() {
-    await this.productServices.getProducts().then(response => {
-      this.productList = response.data;
+    await this.productServices.getProducts(this.filterData).then(response => {
+      this.productList = response.products;
+      this.searchInfo.totalPages = response.total_pages;
     });
   }
 
@@ -98,5 +113,30 @@ export class ProductComponent implements OnInit {
       duration: 3000,
       panelClass: 'snack-bar-style'
     });
+  }
+
+  async executeFilters() {
+    await this.getProducts();
+  }
+
+  async nextPage() {
+
+    if (this.filterData.page < this.searchInfo.totalPages) {
+      this.filterData.page --;
+      await this.getProducts();
+    }
+
+  }
+
+  async previousPage() {
+
+    if (this.filterData.page > 1) {
+      this.filterData.page --;
+      await this.getProducts();
+    }
+  }
+
+  toggleFilter() {
+    this.filterOpened = !this.filterOpened;
   }
 }

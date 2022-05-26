@@ -6,9 +6,9 @@ dotenv.config();
 
 export async function createProduct(req: Request, res: Response) {
     
-    const product: Product = new Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode);
+    const product: Product = new Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode, req.body.brand);
     
-    await conn.query(`INSERT INTO product (name,description,price,stock,barcode,deleted) VALUES (${product.toString()}) RETURNING id`)
+    await conn.query(`INSERT INTO product (name,description,price,stock,barcode,brand,deleted) VALUES (${product.toString()}) RETURNING id`)
     .catch(err => {
         console.log(err);
         return res.status(400).send(err);
@@ -26,33 +26,42 @@ export async function createProduct(req: Request, res: Response) {
 
 export async function getProducts(req: Request, res: Response) {
 
-    await conn.query(`SELECT id, name, description, price, stock, barcode
-                        FROM product
-                        WHERE deleted = FALSE
-                        ORDER BY id ASC`)
+    const page = req.query.page;
+    let name = req.query.name ? req.query.name : null;
+    let barcode = req.query.barcode ? req.query.barcode : null;
+    let brand = req.query.brand ? req.query.brand : null;
+
+    if (name !== null && name !== 'null') {
+        name = "'" + name + "'"; 
+    }
+
+    if (brand !== null && brand !== 'null') {
+        brand = "'" + brand + "'"; 
+    }
+
+    if (barcode !== null && barcode !== 'null') {
+        barcode = "'" + barcode + "'"; 
+    }
+
+    await conn.query(`SELECT search_products(${page}, ${name}, ${barcode}, ${brand})`)
     .catch(err => {
         return res.status(400).send(err);
     })
     .then(resp => {
 
-        if((resp as any).rows.length === 0) {
-            return res.status(404).json({
-                error: 'No data found'
-            });
-        } else {
-            const productsArray = (resp as any).rows;
-    
-            res.status(200).json({
-                status: 'OK',
-                data: productsArray
-            }); 
-        }
+        const data = JSON.parse((resp as any).rows[0].search_products);
+
+        res.status(200).json({
+            status: 'OK',
+            data: data
+        }); 
+        
     });
 }
 
 export async function identifyById(req: Request, res: Response) {
 
-    await conn.query(`SELECT id, name, description, price, stock, barcode
+    await conn.query(`SELECT id, name, description, price, stock, barcode, brand
                         FROM product
                         WHERE deleted = FALSE AND id = ${req.params.id}`)
     .catch(err => {
@@ -184,7 +193,25 @@ export async function setPrice(req: Request, res: Response) {
 export async function setBarcode(req: Request, res: Response) {
     
     await conn.query(`UPDATE product
-                        SET barcode = ${req.body.barcode}
+                        SET barcode = '${req.body.barcode}'
+                        WHERE id = ${req.params.id}`)
+    .catch(err => {
+        console.log(err);
+        return res.status(400).send(err);
+    })
+    .then(() => {
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'Operation completed'
+        }); 
+    });
+}
+
+export async function setBrand(req: Request, res: Response) {
+    
+    await conn.query(`UPDATE product
+                        SET brand = '${req.body.brand}'
                         WHERE id = ${req.params.id}`)
     .catch(err => {
         console.log(err);

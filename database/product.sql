@@ -4,6 +4,7 @@ CREATE TABLE product (
     price           real NOT NULL,
     stock           int NOT NULL,
     barcode         text,
+	brand			text,
     deleted         boolean
 ) INHERITS (
 	core_object
@@ -88,4 +89,129 @@ BEGIN
     RETURN v_products;
 END$$
 LANGUAGE plpgsql IMMUTABLE STRICT
+SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION filter_products_by_name (
+    p_products                    product[],
+    p_name                     	  text
+) RETURNS product[] AS $$
+DECLARE
+    v_products                    text;
+    v_querystring                 text;
+BEGIN
+
+    v_querystring := format (
+        'SELECT ARRAY(SELECT x FROM unnest(%L::product[]) x 
+            WHERE name ilike ''%%'' || %L || ''%%'')', 
+        p_products,
+        p_name
+    );
+
+    EXECUTE v_querystring INTO v_products;
+
+    RETURN v_products;
+END;
+$$ LANGUAGE plpgsql STABLE STRICT
+SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION filter_products_by_brand (
+    p_products                    product[],
+    p_brand                       text
+) RETURNS product[] AS $$
+DECLARE
+    v_products                    text;
+    v_querystring                 text;
+BEGIN
+
+    v_querystring := format (
+        'SELECT ARRAY(SELECT x FROM unnest(%L::product[]) x 
+            WHERE brand ilike ''%%'' || %L || ''%%'')', 
+        p_products,
+        p_brand
+    );
+
+    EXECUTE v_querystring INTO v_products;
+
+    RETURN v_products;
+END;
+$$ LANGUAGE plpgsql STABLE STRICT
+SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION filter_products_by_barcode (
+    p_products                    product[],
+    p_barcode                     text
+) RETURNS product[] AS $$
+DECLARE
+    v_products                    text;
+    v_querystring                 text;
+BEGIN
+
+    v_querystring := format (
+        'SELECT ARRAY(SELECT x FROM unnest(%L::product[]) x 
+            WHERE barcode ilike ''%%'' || %L || ''%%'')', 
+        p_products,
+        p_barcode
+    );
+
+    EXECUTE v_querystring INTO v_products;
+
+    RETURN v_products;
+END;
+$$ LANGUAGE plpgsql STABLE STRICT
+SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION search_products (
+	p_page					int,
+	p_name					text DEFAULT '%',
+	p_barcode				text DEFAULT '%',
+	p_brand					text DEFAULT '%'
+)
+RETURNS text AS $$
+DECLARE
+	v_products				product[];
+	v_response				jsonb;
+	v_total_pages			int DEFAULT 0;
+BEGIN
+	
+	v_products := get_products();
+	
+	IF p_name != '%' AND p_name IS NOT NULL
+	THEN
+		v_products := filter_products_by_name(v_products, p_name);
+	END IF;
+	
+	IF p_barcode != '%' AND p_barcode IS NOT NULL
+	THEN
+		v_products := filter_products_by_barcode(v_products, p_barcode);
+	END IF;
+
+	IF p_brand != '%' AND p_brand IS NOT NULL
+	THEN
+		v_products := filter_products_by_brand(v_products, p_brand);
+	END IF;
+	
+	IF p_page != 0
+	THEN
+		v_products := paginate_products(p_page, v_products);
+	END IF;
+
+	v_total_pages := get_total_products_pages(v_products);
+
+	IF v_total_pages IS NULL THEN
+		v_total_pages := 0;
+	END IF;
+	
+	v_response := jsonb_build_object (
+		'products', array_to_json(v_products),
+		'total_pages', v_total_pages,
+		'page_number', p_page
+	);
+
+	RETURN v_response::text;
+END;
+$$ LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;

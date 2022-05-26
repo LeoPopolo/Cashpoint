@@ -39,6 +39,7 @@ export class DialogAddEditProductComponent implements OnInit {
           description: this.oldProduct.description,
           stock: this.oldProduct.stock,
           price: this.oldProduct.price,
+          brand: this.oldProduct.brand,
           barcode: this.oldProduct.barcode
         }
       );
@@ -60,6 +61,9 @@ export class DialogAddEditProductComponent implements OnInit {
 
       if (this.addProductForm.value.stock !== this.oldProduct.stock)
         await this.setStock(this.addProductForm.value.stock).then(() => changes = true);
+
+      if (this.addProductForm.value.brand !== this.oldProduct.brand)
+        await this.setBrand(this.addProductForm.value.brand).then(() => changes = true);
 
       if (this.addProductForm.value.barcode !== this.oldProduct.barcode)
         await this.setBarcode(this.addProductForm.value.barcode).then(() => changes = true);
@@ -88,6 +92,10 @@ export class DialogAddEditProductComponent implements OnInit {
     await this.productServices.setStock(this.data.id, stock).catch(err => console.log(err));
   }
 
+  async setBrand(brand: string) {
+    await this.productServices.setBrand(this.data.id, brand).catch(err => console.log(err));
+  }
+
   async setBarcode(barcode: string) {
     await this.productServices.setBarcode(this.data.id, barcode).catch(err => console.log(err));
   }
@@ -98,6 +106,7 @@ export class DialogAddEditProductComponent implements OnInit {
       description: [''],
       stock: ['', Validators.required],
       price: ['', Validators.required],
+      brand: ['', Validators.required],
       barcode: ['', Validators.required],
     });
 
@@ -112,6 +121,7 @@ export class DialogAddEditProductComponent implements OnInit {
         description: this.addProductForm.value.description,
         price: this.addProductForm.value.price,
         stock: this.addProductForm.value.stock,
+        brand: this.addProductForm.value.brand,
         barcode: this.addProductForm.value.barcode,
       }
 

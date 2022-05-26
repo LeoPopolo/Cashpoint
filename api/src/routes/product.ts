@@ -9,6 +9,7 @@ import { createProduct,
          identifyById, 
          reactivateProduct, 
          setBarcode, 
+         setBrand, 
          setDescription, 
          setName, 
          setPrice, 
@@ -26,6 +27,7 @@ router.patch('/name/:id', tokenValidation, setName);
 router.patch('/description/:id', tokenValidation, setDescription);
 router.patch('/stock/:id', tokenValidation, setStock);
 router.patch('/price/:id', tokenValidation, setPrice);
+router.patch('/brand/:id', tokenValidation, setBrand);
 router.patch('/barcode/:id', tokenValidation, setBarcode);
 
 export default router;

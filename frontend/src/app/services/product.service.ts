@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Product } from '../home/product/product.component';
 
 @Injectable({
@@ -13,11 +13,18 @@ export class ProductService {
     private httpClient: HttpClient
   ) { }
 
-  async getProducts() {
+  async getProducts(filter: any) {
 
-    const response: any = await this.httpClient.get<any>(`${this.endpoint}/api/product`).toPromise();
+    let params = {
+      page: filter.page,
+      name: filter.name,
+      brand: filter.brand,
+      barcode: filter.barcode,
+    };
 
-    return response;
+    const response: any = await this.httpClient.get<any>(`${this.endpoint}/api/product`, {params: params}).toPromise();
+
+    return response.data;
   }
 
   async createProduct(data: Product) {
@@ -78,6 +85,17 @@ export class ProductService {
     }
 
     const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/stock/${id}`, body).toPromise();
+
+    return response;
+  }
+
+  async setBrand(id: number, brand: string) {
+
+    const body = {
+      brand: brand
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/brand/${id}`, body).toPromise();
 
     return response;
   }

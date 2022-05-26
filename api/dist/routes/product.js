@@ -13,6 +13,7 @@ router.patch('/name/:id', verifyToken_1.tokenValidation, product_controller_1.se
 router.patch('/description/:id', verifyToken_1.tokenValidation, product_controller_1.setDescription);
 router.patch('/stock/:id', verifyToken_1.tokenValidation, product_controller_1.setStock);
 router.patch('/price/:id', verifyToken_1.tokenValidation, product_controller_1.setPrice);
+router.patch('/brand/:id', verifyToken_1.tokenValidation, product_controller_1.setBrand);
 router.patch('/barcode/:id', verifyToken_1.tokenValidation, product_controller_1.setBarcode);
 exports.default = router;
 //# sourceMappingURL=product.js.map
