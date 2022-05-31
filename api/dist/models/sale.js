@@ -7,7 +7,7 @@ class Sale {
         this.products = products;
         this.user_owner_id = user_owner_id;
         this.payment_method = payment_method;
-        this.status = SaleStatusEnum_1.SaleStatus.Open;
+        this.status = SaleStatusEnum_1.SaleStatus.Closed;
         this.discount = discount;
         this.total = 0;
         if (total) {
@@ -20,7 +20,7 @@ class Sale {
     parseProducts() {
         let response = 'array[';
         for (let item of this.products) {
-            response += '(' + item.id + ',' + item.quantity + '),';
+            response += `(${item.id}, '${item.name}', '${item.description}', ${item.price}, '${item.barcode}', '${item.brand}', ${item.quantity}),`;
         }
         response = response.substring(0, response.length - 1);
         response += ']::sale_item[]';

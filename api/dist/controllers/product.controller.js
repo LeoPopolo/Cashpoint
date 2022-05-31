@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setBrand = exports.setBarcode = exports.setPrice = exports.setStock = exports.setDescription = exports.setName = exports.reactivateProduct = exports.deleteProduct = exports.identifyById = exports.getProducts = exports.createProduct = void 0;
+exports.setBrand = exports.setBarcode = exports.setPrice = exports.setStock = exports.setDescription = exports.setName = exports.reactivateProduct = exports.deleteProduct = exports.identifyByBarcode = exports.identifyById = exports.getProducts = exports.createProduct = void 0;
 const product_1 = require("../models/product");
 const database_1 = __importDefault(require("../database"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -90,6 +90,31 @@ function identifyById(req, res) {
     });
 }
 exports.identifyById = identifyById;
+function identifyByBarcode(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`SELECT id, name, description, price, stock, barcode, brand
+                        FROM product
+                        WHERE deleted = FALSE AND barcode = '${req.params.barcode}'`)
+            .catch(err => {
+            return res.status(400).send(err);
+        })
+            .then(resp => {
+            if (resp.rows.length === 0) {
+                return res.status(404).json({
+                    error: 'No data found'
+                });
+            }
+            else {
+                const product = resp.rows[0];
+                res.status(200).json({
+                    status: 'OK',
+                    data: product
+                });
+            }
+        });
+    });
+}
+exports.identifyByBarcode = identifyByBarcode;
 function deleteProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield database_1.default.query(`UPDATE product

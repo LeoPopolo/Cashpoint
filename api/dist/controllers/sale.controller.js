@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.closeSale = exports.createSale = void 0;
+exports.getSales = exports.createSale = void 0;
 const sale_1 = require("../models/sale");
 const database_1 = __importDefault(require("../database"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -38,47 +38,36 @@ function createSale(req, res) {
 }
 exports.createSale = createSale;
 ;
-function closeSale(req, res) {
+function getSales(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield database_1.default.query(`SELECT close_sale(${req.params.id}, '${req.body.payment_method}', ${req.body.discount})`)
+        const page = req.query.page;
+        let total = req.query.total ? req.query.total : null;
+        let paymentMethod = req.query.payment_method ? req.query.payment_method : null;
+        let dateFrom = req.query.date_from ? req.query.date_from : null;
+        let dateTo = req.query.date_to ? req.query.date_to : null;
+        if (paymentMethod !== null && paymentMethod !== 'null') {
+            paymentMethod = "'" + paymentMethod + "'";
+        }
+        if (dateFrom !== null && dateFrom !== 'null') {
+            dateFrom = "'" + dateFrom + "'";
+        }
+        if (dateTo !== null && dateTo !== 'null') {
+            dateTo = "'" + dateTo + "'";
+        }
+        yield database_1.default.query(`SELECT search_sales(${page}, ${total}, ${paymentMethod}, ${dateFrom}, ${dateTo})`)
             .catch(err => {
-            console.log(err);
             return res.status(400).send(err);
         })
-            .then(() => {
+            .then(resp => {
+            console.log(resp);
             res.status(200).json({
                 status: 'OK',
-                message: 'Operation completed',
-                action: 'Sale closed'
+                data: 'caca'
             });
         });
     });
 }
-exports.closeSale = closeSale;
-;
-// export async function getProducts(req: Request, res: Response) {
-//     var productsArray = [];
-//     await conn.query(`SELECT id, name, description, price, stock, barcode
-//                         FROM product
-//                         WHERE deleted = FALSE
-//                         ORDER BY id ASC`)
-//     .catch(err => {
-//         return res.status(400).send(err);
-//     })
-//     .then(resp => {
-//         if((resp as any).rows.length === 0) {
-//             return res.status(404).json({
-//                 error: 'No data found'
-//             });
-//         } else {
-//             productsArray = (resp as any).rows;
-//             res.status(200).json({
-//                 status: 'OK',
-//                 data: productsArray
-//             }); 
-//         }
-//     });
-// }
+exports.getSales = getSales;
 // export async function identifyById(req: Request, res: Response) {
 //     await conn.query(`SELECT id, name, description, price, stock, barcode
 //                         FROM product

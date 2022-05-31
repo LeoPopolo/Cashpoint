@@ -7,6 +7,7 @@ const product_controller_1 = require("../controllers/product.controller");
 router.post('/', verifyToken_1.tokenValidation, product_controller_1.createProduct);
 router.get('/', verifyToken_1.tokenValidation, product_controller_1.getProducts);
 router.get('/:id', verifyToken_1.tokenValidation, product_controller_1.identifyById);
+router.get('/barcode/:barcode', verifyToken_1.tokenValidation, product_controller_1.identifyByBarcode);
 router.get('/reactivate/:id', verifyToken_1.tokenValidation, product_controller_1.reactivateProduct);
 router.delete('/:id', verifyToken_1.tokenValidation, product_controller_1.deleteProduct);
 router.patch('/name/:id', verifyToken_1.tokenValidation, product_controller_1.setName);

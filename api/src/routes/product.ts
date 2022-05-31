@@ -6,6 +6,7 @@ const router: Router = Router();
 import { createProduct, 
          deleteProduct, 
          getProducts, 
+         identifyByBarcode, 
          identifyById, 
          reactivateProduct, 
          setBarcode, 
@@ -19,6 +20,7 @@ router.post('/', tokenValidation, createProduct);
 
 router.get('/', tokenValidation, getProducts);
 router.get('/:id', tokenValidation, identifyById);
+router.get('/barcode/:barcode', tokenValidation, identifyByBarcode);
 router.get('/reactivate/:id', tokenValidation, reactivateProduct);
 
 router.delete('/:id', tokenValidation, deleteProduct);

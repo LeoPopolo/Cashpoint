@@ -84,6 +84,31 @@ export async function identifyById(req: Request, res: Response) {
     });
 }
 
+export async function identifyByBarcode(req: Request, res: Response) {
+
+    await conn.query(`SELECT id, name, description, price, stock, barcode, brand
+                        FROM product
+                        WHERE deleted = FALSE AND barcode = '${req.params.barcode}'`)
+    .catch(err => {
+        return res.status(400).send(err);
+    })
+    .then(resp => {
+
+        if((resp as any).rows.length === 0) {
+            return res.status(404).json({
+                error: 'No data found'
+            });
+        } else {
+            const product = (resp as any).rows[0];
+    
+            res.status(200).json({
+                status: 'OK',
+                data: product
+            }); 
+        }
+    });
+}
+
 export async function deleteProduct(req: Request, res: Response) {
 
     await conn.query(`UPDATE product
