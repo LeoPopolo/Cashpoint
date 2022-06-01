@@ -1,0 +1,38 @@
+h3 {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.data {
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: .5em;
+  }
+}
+
+.product-list {
+  padding: 1em;
+
+  div {
+    display: grid;
+    grid-template-columns: .5fr 2fr 2.5fr 1fr 1fr 1fr 2fr;
+    border-bottom: 1px solid #bbb;
+    padding: .5em;
+
+    span {
+      text-align: left;
+    }
+  }
+}
+
+.subtotal {
+  padding: .5em;
+  text-align: end;
+}
+
+.total {
+  padding: .5em;
+  text-align: end;
+}

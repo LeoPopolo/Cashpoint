@@ -1,1 +1,67 @@
-<p>sale works!</p>
+<main>
+  <h1>Ventas</h1>
+
+  <div class="buttons-container">
+    <button class="btn-primary"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
+    <div class="filters" [ngClass]="{'show-filters': filterOpened}">
+      <div>
+        <input type="text" placeholder="Nombre" [(ngModel)]="jsonFilter.name">
+      </div>
+      <div>
+        <input type="text" placeholder="Marca" [(ngModel)]="jsonFilter.brand">
+      </div>
+      <div>
+        <input type="text" placeholder="Código de barras" [(ngModel)]="jsonFilter.barcode">
+      </div>
+      <div class="search" (click)="executeFilters()">
+        <mat-icon>search</mat-icon>
+      </div>
+    </div>
+    <span>
+      <mat-icon>filter_list</mat-icon>
+      <span>Filtrar</span>
+    </span>
+  </div>
+
+  <div class="table">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Total</span>
+      <span>Estado</span>
+      <span>Método de pago</span>
+      <span>Descuento</span>
+      <span>Fecha y hora</span>
+      <span>Acciones</span>
+    </div>
+    <div class="table-body">
+      <div class="table-body-element" *ngFor="let item of saleList">
+        <span>#{{item.id}}</span>
+        <span>${{item.total}}</span>
+        <span>{{parseStatus(item.status)}}</span>
+        <span>{{item.payment_method}}</span>
+        <span>{{item.discount | percent}}</span>
+        <span>{{item.creation_timestamp | date:'short'}}</span>
+        <span class="actions-element">
+          <mat-icon (click)="openDialogSeeSale(item.id)">visibility</mat-icon>
+        </span>
+      </div>
+    </div>
+    <div class="table-pagination">
+      <div>
+        <span (click)="previousPage()">
+          <mat-icon>
+            arrow_back_ios
+          </mat-icon>
+        </span>
+        <span class="pagination-data">
+          {{jsonFilter.page}}/{{searchInfo.totalPages}}
+        </span>
+        <span (click)="nextPage()">
+          <mat-icon>
+            arrow_forward_ios
+          </mat-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+</main>

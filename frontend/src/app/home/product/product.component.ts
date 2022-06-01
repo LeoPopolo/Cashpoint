@@ -13,6 +13,7 @@ export class Product {
   stock: number = 0;
   brand: string = '';
   barcode: string = '';
+  quantity?: number;
 }
 
 @Component({

@@ -44,6 +44,7 @@ main {
       transition: 200ms all;
       transform: rotateX(90deg);
       visibility: hidden;
+      perspective: 500;
 
       div {
         padding: 1em;
