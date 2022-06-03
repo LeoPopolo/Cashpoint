@@ -1,0 +1,31 @@
+main {
+  padding: 3% 10% 0;
+
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 3em;
+  }
+
+  .search-products {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    margin-top: 1em;
+
+    div {
+      padding: 1em;
+      box-shadow: 1px 1px 5px 0 #bbb;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      input {
+        font-size: 1.2em;
+        width: 100%;
+      }
+    }
+  }
+}

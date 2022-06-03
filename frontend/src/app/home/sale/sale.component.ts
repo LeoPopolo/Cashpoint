@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogSeeSaleComponent } from 'src/app/dialogs/dialog-see-sale/dialog-see-sale.component';
 import { SaleService } from '../../services/sale.service';
 import { Product } from '../product/product.component';
+import * as moment from 'moment';
 
 export class SaleResponse {
   id: number = 0;
@@ -25,7 +26,7 @@ export class SaleComponent implements OnInit {
   jsonFilter: any = {
     page: 1,
     total: null,
-    payment_method: null,
+    payment_method: 'efectivo',
     date_from: null,
     date_to: null
   };
@@ -37,6 +38,8 @@ export class SaleComponent implements OnInit {
   searchInfo: any = {
     totalPages: 0
   }
+
+  selectedDate: string = 'todas';
 
   constructor(
     private dialog: MatDialog,
@@ -80,16 +83,65 @@ export class SaleComponent implements OnInit {
     this.dialog.open(DialogSeeSaleComponent, dialogOptions);
   }
 
-  async executeFilters() {
+  handleDate() {
+
+    switch(this.selectedDate) {
+      case 'todas': {
+        this.jsonFilter.date_from = null;
+        this.jsonFilter.date_to = null;
+      }
+      break;
+      case 'hoy': {
+        this.jsonFilter.date_from = moment().format('YYYY-MM-DD');
+        this.jsonFilter.date_to = moment().format('YYYY-MM-DD');
+      }
+      break;
+      case 'ayer': {
+        this.jsonFilter.date_from = moment().subtract(1, 'd').format('YYYY-MM-DD');
+        this.jsonFilter.date_to = moment().subtract(1, 'd').format('YYYY-MM-DD');
+      }
+      break;
+      case 'semana': {
+        this.jsonFilter.date_from = moment().startOf('week').format('YYYY-MM-DD');
+        this.jsonFilter.date_to = moment().format('YYYY-MM-DD');
+      }
+      break;
+      case 'mes': {
+        this.jsonFilter.date_from = moment().startOf('month').format('YYYY-MM-DD');
+        this.jsonFilter.date_to = moment().format('YYYY-MM-DD');
+      }
+      break;
+      case 'año': {
+        this.jsonFilter.date_from = moment().startOf('year').format('YYYY-MM-DD');
+        this.jsonFilter.date_to = moment().format('YYYY-MM-DD');
+      }
+      break;
+    }
 
   }
 
-  async previousPage() {
-
+  async executeFilters() {
+    await this.getSales();
   }
 
   async nextPage() {
 
+    if (this.jsonFilter.page < this.searchInfo.totalPages) {
+      this.jsonFilter.page --;
+      await this.getSales();
+    }
+  }
+
+  async previousPage() {
+
+    if (this.jsonFilter.page > 1) {
+      this.jsonFilter.page --;
+      await this.getSales();
+    }
+  }
+
+  toggleFilter() {
+    this.filterOpened = !this.filterOpened;
   }
 
 }

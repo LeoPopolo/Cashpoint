@@ -2,22 +2,36 @@
   <h1>Ventas</h1>
 
   <div class="buttons-container">
-    <button class="btn-primary"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
+    <button class="btn-primary" routerLink="../new-sale"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
     <div class="filters" [ngClass]="{'show-filters': filterOpened}">
       <div>
-        <input type="text" placeholder="Nombre" [(ngModel)]="jsonFilter.name">
+        <input type="number" placeholder="Total" [(ngModel)]="jsonFilter.total">
       </div>
       <div>
-        <input type="text" placeholder="Marca" [(ngModel)]="jsonFilter.brand">
+        <mat-select [(ngModel)]="jsonFilter.payment_method">
+          <mat-option [value]="'todos'">Todos</mat-option>
+          <mat-option [value]="'efectivo'">Efectivo</mat-option>
+          <mat-option [value]="'débito'">Débito</mat-option>
+          <mat-option [value]="'crédito'">Crédito</mat-option>
+          <mat-option [value]="'mercadopago'">Mercado pago</mat-option>
+          <mat-option [value]="'transferencia'">Transferencia bancaria</mat-option>
+        </mat-select>
       </div>
       <div>
-        <input type="text" placeholder="Código de barras" [(ngModel)]="jsonFilter.barcode">
+        <mat-select [(ngModel)]="selectedDate" (ngModelChange)="handleDate()">
+          <mat-option [value]="'todas'">Todas</mat-option>
+          <mat-option [value]="'hoy'">Hoy</mat-option>
+          <mat-option [value]="'ayer'">Ayer</mat-option>
+          <mat-option [value]="'semana'">Esta Semana</mat-option>
+          <mat-option [value]="'mes'">Este Mes</mat-option>
+          <mat-option [value]="'año'">Este Año</mat-option>
+        </mat-select>
       </div>
       <div class="search" (click)="executeFilters()">
         <mat-icon>search</mat-icon>
       </div>
     </div>
-    <span>
+    <span (click)="toggleFilter()">
       <mat-icon>filter_list</mat-icon>
       <span>Filtrar</span>
     </span>

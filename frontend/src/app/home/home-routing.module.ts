@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
 import { ProductComponent } from './product/product.component';
 import { SaleComponent } from './sale/sale.component';
+import { NewSaleComponent } from './sale/new-sale/new-sale.component';
 
 const routes: Routes = [
   {
@@ -23,7 +24,22 @@ const routes: Routes = [
         path: 'sales',
         component: SaleComponent,
         pathMatch: 'full'
-      }
+      },
+      {
+        path: '',
+        redirectTo: 'sales',
+        pathMatch: 'full'
+      },
+      {
+        path: 'new-sale',
+        component: NewSaleComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: '',
+        redirectTo: 'new-sale',
+        pathMatch: 'full'
+      },
     ],
   },
 ];

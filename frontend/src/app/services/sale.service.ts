@@ -17,7 +17,7 @@ export class SaleService {
     let params = {
       page: filter.page,
       total: filter.total,
-      payment_method: filter.payment_method,
+      payment_method: filter.payment_method === 'todos' ? null : filter.payment_method,
       date_from: filter.date_from,
       date_to: filter.date_to
     };

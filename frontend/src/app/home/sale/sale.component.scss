@@ -38,7 +38,8 @@ main {
 
     .filters {
       position: relative;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr .2fr;
       align-items: center;
       gap: 1em;
       transition: 200ms all;
