@@ -14,7 +14,7 @@ main {
     gap: 1em;
     margin-top: 1em;
 
-    div {
+    > div {
       padding: 1em;
       box-shadow: 1px 1px 5px 0 #bbb;
       border-radius: 100px;
@@ -26,6 +26,59 @@ main {
         font-size: 1.2em;
         width: 100%;
       }
+    }
+
+    .container-filter-all {
+      position: relative;
+
+      > span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        mat-icon {
+          cursor: pointer;
+        }
+      }
+
+      div {
+        width: 100%;
+        position: absolute;
+        padding: 1em;
+        top: 4em;
+        left: 0;
+        box-shadow: 1px 1px 5px 0 #bbb;
+        max-height: 20vh;
+        overflow-y: scroll;
+        background-color: #fff;
+
+        span {
+          width: 100%;
+          padding: 1em;
+          display: block;
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--primary-color-transparent);
+          }
+        }
+      }
+    }
+  }
+
+  .sale-products {
+    padding: 1em;
+
+    h2 {
+      padding-block: 1em;
+    }
+
+    .sale-products-header, .sale-products-body {
+      display: grid;
+      grid-template-columns: .5fr 1fr 1fr .5fr .5fr .5fr 1fr 1fr .5fr;
+      padding: 1em;
+      border-bottom: 1px solid #bbb;
     }
   }
 }

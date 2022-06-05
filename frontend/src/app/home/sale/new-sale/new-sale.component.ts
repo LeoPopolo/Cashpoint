@@ -10,9 +10,11 @@ import { Product } from '../../product/product.component';
 })
 export class NewSaleComponent implements OnInit {
 
-  productFilter: string = '';
+  productFilterAll: string = '';
 
   productList: Array<Product> = [];
+
+  filteredProductList: Array<Product> = []
 
   filterData = {
     page: 0,
@@ -21,6 +23,10 @@ export class NewSaleComponent implements OnInit {
     barcode: null
   }
 
+  showFilteredProductList: boolean = false;
+
+  saleProducts: Array<Product> = [];
+
   constructor(
     private productServices: ProductService,
     private saleServices: SaleService
@@ -28,21 +34,56 @@ export class NewSaleComponent implements OnInit {
 
   async ngOnInit() {
     await this.getProducts();
+  }
 
-    const result = this.productList.filter(item => {
-      return !item.name.includes('Jugo');
+  filterAllData() {
+    this.showFilteredProductList = true;
+
+    this.filteredProductList = this.productList.filter(item => {
+      return item.name.toLowerCase().includes(this.productFilterAll.toLowerCase())
+          || item.brand.toLowerCase().includes(this.productFilterAll.toLowerCase())
+          || item.barcode.toLowerCase().includes(this.productFilterAll.toLowerCase())
+          || item.description.toLowerCase().includes(this.productFilterAll.toLowerCase());
     });
-
-    console.log(result);
   }
 
   async getProducts() {
     await this.productServices.getProducts(this.filterData)
     .then( response => {
       this.productList = response.products;
+      this.filteredProductList = this.productList;
     })
     .catch( err => {
       console.log(err);
     });
   }
+
+  addToSale(item: Product) {
+    this.showFilteredProductList = false;
+    this.productFilterAll = '';
+
+    const result = this.saleProducts.findIndex(element => element.id === item.id);
+
+    if (result >= 0) {
+
+      if (this.saleProducts[result].quantity) {
+        this.saleProducts[result].quantity! += 1;
+      }
+
+    } else {
+
+      if (item.quantity)
+        item.quantity += 1;
+      else
+        item.quantity = 1;
+
+      this.saleProducts.push(item);
+    }
+  }
+
+  closeFilteredProducts() {
+    this.showFilteredProductList = false;
+    this.productFilterAll = '';
+  }
+
 }

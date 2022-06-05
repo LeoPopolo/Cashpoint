@@ -5,8 +5,48 @@
     <div>
       <input type="text" placeholder="Código de barras">
     </div>
-    <div>
-      <input type="text" placeholder="Buscar por nombre, marca y código de barras...">
+    <div class="container-filter-all">
+      <span>
+        <input type="text" placeholder="Buscar por nombre, marca, descripción y C/barras..."
+                          [(ngModel)]="productFilterAll"
+                          (ngModelChange)="filterAllData()"
+        >
+        <mat-icon *ngIf="showFilteredProductList" (click)="closeFilteredProducts()">
+          close
+        </mat-icon>
+      </span>
+
+      <div *ngIf="showFilteredProductList">
+        <span *ngFor="let item of filteredProductList" (click)="addToSale(item)">
+          #{{item.id}} {{item.name}} - {{item.description}} | {{item.brand}} ({{item.barcode}})
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sale-products">
+    <h2>Productos cargados</h2>
+    <div class="sale-products-header">
+      <span>ID</span>
+      <span>Nombre</span>
+      <span>Descripción</span>
+      <span>Precio</span>
+      <span>Cantidad</span>
+      <span>Stock</span>
+      <span>Marca</span>
+      <span>Código de barras</span>
+      <span>Acciones</span>
+    </div>
+    <div class="sale-products-body" *ngFor="let item of saleProducts">
+      <span>{{item.id}}</span>
+      <span>{{item.name}}</span>
+      <span>{{item.description}}</span>
+      <span>{{item.price}}</span>
+      <span>{{item.quantity}}</span>
+      <span>{{item.stock}}</span>
+      <span>{{item.brand}}</span>
+      <span>{{item.barcode}}</span>
+      <span><mat-icon>delete</mat-icon></span>
     </div>
   </div>
 
