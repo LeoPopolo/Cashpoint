@@ -27,13 +27,13 @@ export class SaleService {
     return response.data;
   }
 
-  async createProduct(data: any) {
+  async createSale(data: any) {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    const response: any = await this.httpClient.post<any>(`${this.endpoint}/api/product`, data, {headers: headers}).toPromise();
+    const response: any = await this.httpClient.post<any>(`${this.endpoint}/api/sale`, data, {headers: headers}).toPromise();
 
     return response;
   }

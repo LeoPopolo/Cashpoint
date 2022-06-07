@@ -13,10 +13,6 @@ export async function createSale(req: Request, res: Response) {
                                     req.body.discount
                                 );
     await conn.query(`SELECT create_sale(${sale.toString()})`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(response => {
 
         let json_response = JSON.parse((response as any).rows[0].create_sale);
@@ -28,6 +24,10 @@ export async function createSale(req: Request, res: Response) {
             status: 'OK',
             data: sale.responseDto()
         });
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(400).send(err);
     });
 };
 
@@ -52,9 +52,6 @@ export async function getSales(req: Request, res: Response) {
     }
 
     await conn.query(`SELECT search_sales(${page}, ${total}, ${paymentMethod}, ${dateFrom}, ${dateTo})`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
     .then(response => {
 
         const data = JSON.parse((response as any).rows[0].search_sales);
@@ -66,15 +63,15 @@ export async function getSales(req: Request, res: Response) {
         res.status(200).json({
             data: data
         });         
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
 export async function identifyById(req: Request, res: Response) {
 
     await conn.query(`SELECT sale_identify_by_id(${req.params.id})`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
     .then(response => {
 
         const data = JSON.parse((response as any).rows[0].sale_identify_by_id);
@@ -84,5 +81,8 @@ export async function identifyById(req: Request, res: Response) {
         res.status(200).json({
             data: parsedData
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }

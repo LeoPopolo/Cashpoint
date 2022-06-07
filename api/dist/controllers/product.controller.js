@@ -21,17 +21,17 @@ function createProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const product = new product_1.Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode, req.body.brand);
         yield database_1.default.query(`INSERT INTO product (name,description,price,stock,barcode,brand,deleted) VALUES (${product.toString()}) RETURNING id`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then((response) => __awaiter(this, void 0, void 0, function* () {
             product.id = response.rows[0].id;
             res.status(200).json({
                 status: 'OK',
                 data: product
             });
-        }));
+        }))
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
     });
 }
 exports.createProduct = createProduct;
@@ -52,15 +52,15 @@ function getProducts(req, res) {
             barcode = "'" + barcode + "'";
         }
         yield database_1.default.query(`SELECT search_products(${page}, ${name}, ${barcode}, ${brand})`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(resp => {
             const data = JSON.parse(resp.rows[0].search_products);
             res.status(200).json({
                 status: 'OK',
                 data: data
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -70,9 +70,6 @@ function identifyById(req, res) {
         yield database_1.default.query(`SELECT id, name, description, price, stock, barcode, brand
                         FROM product
                         WHERE deleted = FALSE AND id = ${req.params.id}`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(resp => {
             if (resp.rows.length === 0) {
                 return res.status(404).json({
@@ -86,6 +83,9 @@ function identifyById(req, res) {
                     data: product
                 });
             }
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -95,9 +95,6 @@ function identifyByBarcode(req, res) {
         yield database_1.default.query(`SELECT id, name, description, price, stock, barcode, brand
                         FROM product
                         WHERE deleted = FALSE AND barcode = '${req.params.barcode}'`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(resp => {
             if (resp.rows.length === 0) {
                 return res.status(404).json({
@@ -107,10 +104,12 @@ function identifyByBarcode(req, res) {
             else {
                 const product = resp.rows[0];
                 res.status(200).json({
-                    status: 'OK',
                     data: product
                 });
             }
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -120,14 +119,14 @@ function deleteProduct(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET deleted = TRUE
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -137,14 +136,14 @@ function reactivateProduct(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET deleted = FALSE
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -154,15 +153,15 @@ function setName(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET name = '${req.body.name}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -172,15 +171,15 @@ function setDescription(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET description = '${req.body.description}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -190,15 +189,15 @@ function setStock(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET stock = ${req.body.stock}
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -208,15 +207,15 @@ function setPrice(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET price = ${req.body.price}
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -226,15 +225,15 @@ function setBarcode(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET barcode = '${req.body.barcode}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -244,15 +243,15 @@ function setBrand(req, res) {
         yield database_1.default.query(`UPDATE product
                         SET brand = '${req.body.brand}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }

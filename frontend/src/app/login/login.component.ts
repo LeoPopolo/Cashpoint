@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
       .then(data => {
         if (data.headers.get('Authorization') !== null) {
           localStorage.setItem('token', data.headers.get('Authorization'));
-          localStorage.setItem('userData', data.body.data);
+          localStorage.setItem('userData', JSON.stringify(data.body.data));
 
           this.router.navigate(['/home']);
         }

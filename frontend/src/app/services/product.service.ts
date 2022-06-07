@@ -45,6 +45,13 @@ export class ProductService {
     return response;
   }
 
+  async identifyByBarcode(barcode: string) {
+
+    const response: any = await this.httpClient.get<any>(`${this.endpoint}/api/product/barcode/${barcode}`).toPromise();
+
+    return response;
+  }
+
   async setName(id: number, name: string) {
 
     const body = {

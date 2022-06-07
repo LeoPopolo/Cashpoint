@@ -26,7 +26,7 @@ export class SaleComponent implements OnInit {
   jsonFilter: any = {
     page: 1,
     total: null,
-    payment_method: 'efectivo',
+    payment_method: 'todos',
     date_from: null,
     date_to: null
   };

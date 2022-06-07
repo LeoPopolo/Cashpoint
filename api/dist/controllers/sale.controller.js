@@ -21,10 +21,6 @@ function createSale(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const sale = new sale_1.Sale(req.body.products, req.body.user_owner_id, req.body.payment_method, req.body.discount);
         yield database_1.default.query(`SELECT create_sale(${sale.toString()})`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(response => {
             let json_response = JSON.parse(response.rows[0].create_sale);
             sale.id = json_response.id;
@@ -33,6 +29,10 @@ function createSale(req, res) {
                 status: 'OK',
                 data: sale.responseDto()
             });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
         });
     });
 }
@@ -55,9 +55,6 @@ function getSales(req, res) {
             dateTo = "'" + dateTo + "'";
         }
         yield database_1.default.query(`SELECT search_sales(${page}, ${total}, ${paymentMethod}, ${dateFrom}, ${dateTo})`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(response => {
             const data = JSON.parse(response.rows[0].search_sales);
             if (!data.sales) {
@@ -66,6 +63,9 @@ function getSales(req, res) {
             res.status(200).json({
                 data: data
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -73,15 +73,15 @@ exports.getSales = getSales;
 function identifyById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield database_1.default.query(`SELECT sale_identify_by_id(${req.params.id})`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
             .then(response => {
             const data = JSON.parse(response.rows[0].sale_identify_by_id);
             const parsedData = data ? data : 'Sale not found';
             res.status(200).json({
                 data: parsedData
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }

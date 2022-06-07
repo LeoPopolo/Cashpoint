@@ -84,7 +84,7 @@ CREATE OR REPLACE FUNCTION get_sales (
 RETURNS sale[] AS $$
 	SELECT array (
 		SELECT s FROM sale s
-            WHERE creation_timestamp BETWEEN p_date_from AND p_date_to 
+            WHERE creation_timestamp BETWEEN p_date_from AND p_date_to + '1 day'
 			    ORDER BY creation_timestamp DESC
 	);
 $$

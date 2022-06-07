@@ -1,0 +1,17 @@
+<main>
+  <h3>¿Desea cerrar la venta?</h3>
+  <div>
+    <h4>Método de pago</h4>
+    <mat-select [(ngModel)]="payment_method">
+      <mat-option [value]="'efectivo'">Efectivo</mat-option>
+      <mat-option [value]="'débito'">Débito</mat-option>
+      <mat-option [value]="'crédito'">Crédito</mat-option>
+      <mat-option [value]="'mercadopago'">Mercado pago</mat-option>
+      <mat-option [value]="'transferencia'">Transferencia bancaria</mat-option>
+    </mat-select>
+  </div>
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="closeSale()">Cerrar venta</button>
+    <button class="btn-secondary" (click)="cancel()">Cancelar</button>
+  </div>
+</main>
