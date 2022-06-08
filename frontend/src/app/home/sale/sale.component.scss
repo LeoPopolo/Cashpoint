@@ -46,6 +46,7 @@ main {
       transform: rotateX(90deg);
       visibility: hidden;
       perspective: 500;
+      max-width: 50%;
 
       div {
         padding: 1em;
@@ -87,6 +88,10 @@ main {
     .table-body {
       max-height: 60vh;
       overflow-y: scroll;
+
+      @media (max-width: 1370px) {
+        max-height: 50vh;
+      }
 
       .table-body-element {
         display: grid;

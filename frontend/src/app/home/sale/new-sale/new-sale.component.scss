@@ -88,7 +88,7 @@ main {
 
     .sale-products-header, .sale-products-body div {
       display: grid;
-      grid-template-columns: .5fr 1fr 1fr .5fr .5fr .5fr 1fr 1fr .8fr .5fr;
+      grid-template-columns: .5fr 1fr 1fr .5fr 1fr .5fr 1fr 1fr .8fr .5fr;
       padding: 1em;
       border-bottom: 1px solid #bbb;
     }
@@ -100,6 +100,10 @@ main {
     .sale-products-body{
       max-height: 50vh;
       overflow-y: scroll;
+
+      @media (max-width: 1370px) {
+        max-height: 32vh;
+      }
 
       div {
         align-items: center;

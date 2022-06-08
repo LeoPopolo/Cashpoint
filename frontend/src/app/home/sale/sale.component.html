@@ -5,7 +5,7 @@
     <button class="btn-primary" routerLink="../new-sale"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
     <div class="filters" [ngClass]="{'show-filters': filterOpened}">
       <div>
-        <input type="number" placeholder="Total" [(ngModel)]="jsonFilter.total">
+        <input type="number" placeholder="Total: $" [(ngModel)]="jsonFilter.total">
       </div>
       <div>
         <mat-select [(ngModel)]="jsonFilter.payment_method">

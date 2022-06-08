@@ -138,16 +138,20 @@ export class NewSaleComponent implements OnInit {
       width: '350px'
     }
 
-    const dialogRef = this.dialog.open(DialogCloseSaleComponent, dialogOptions);
+    if (this.saleProducts.length > 0) {
+      const dialogRef = this.dialog.open(DialogCloseSaleComponent, dialogOptions);
 
-    dialogRef.afterClosed().subscribe( async result => {
+      dialogRef.afterClosed().subscribe( async result => {
 
-      if (result.close) {
-        this.payment_method = result.payment_method;
+        if (result.close) {
+          this.payment_method = result.payment_method;
 
-        await this.closeSale();
-      }
-    });
+          await this.closeSale();
+        }
+      });
+    } else {
+      this.openSnackbar('No hay productos cargados en la venta');
+    }
   }
 
   async closeSale() {
