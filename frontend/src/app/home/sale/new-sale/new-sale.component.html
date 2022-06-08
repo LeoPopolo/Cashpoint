@@ -1,0 +1,78 @@
+<main>
+  <div class="title">
+    <mat-icon (click)="backToSales()">
+      arrow_back_ios
+    </mat-icon>
+    <h1>Nueva venta</h1>
+    <span></span>
+  </div>
+
+  <div class="search-products">
+    <div>
+      <input type="text" placeholder="Código de barras" [(ngModel)]="productFilterBarcode" (keyup.enter)="identifyByBarcode()">
+    </div>
+    <div class="container-filter-all">
+      <span>
+        <input type="text" placeholder="Buscar por nombre, marca, descripción y C/barras..."
+                          [(ngModel)]="productFilterAll"
+                          (ngModelChange)="filterAllData()"
+        >
+        <mat-icon *ngIf="showFilteredProductList" (click)="closeFilteredProducts()">
+          close
+        </mat-icon>
+      </span>
+
+      <div *ngIf="showFilteredProductList">
+        <span *ngFor="let item of filteredProductList" (click)="addToSale(item)">
+          #{{item.id}} {{item.name}} - {{item.description}} | {{item.brand}} ({{item.barcode}})
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sale-products">
+    <h2>Productos cargados</h2>
+    <div class="sale-products-header">
+      <span>ID</span>
+      <span>Nombre</span>
+      <span>Descripción</span>
+      <span>Precio</span>
+      <span>Cantidad</span>
+      <span>Stock</span>
+      <span>Marca</span>
+      <span>Código de barras</span>
+      <span>Total</span>
+      <span>Acciones</span>
+    </div>
+    <div class="sale-products-body">
+      <div *ngFor="let item of saleProducts">
+        <span>{{item.id}}</span>
+        <span>{{item.name}}</span>
+        <span>{{item.description}}</span>
+        <span>{{item.price}}</span>
+        <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateTotal()">
+        <span>{{item.stock}}</span>
+        <span>{{item.brand}}</span>
+        <span>{{item.barcode}}</span>
+        <span>${{item.price * item.quantity!}} </span>
+        <span (click)="removeFromSale(item.id!)"><mat-icon>delete</mat-icon></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="total-data">
+    <span>
+      <h3>Subtotal: ${{subtotal}}</h3>
+      <h2>Total: ${{total}}</h2>
+    </span>
+    <span>
+      <button class="btn-primary" (click)="openDialogCloseSale()">Cerrar venta</button>
+    </span>
+    <span>
+      <label>Descuento total:</label>
+      <input type="number" [(ngModel)]="discount" (ngModelChange)="updateTotal()">
+      <label>%</label>
+    </span>
+  </div>
+
+</main>

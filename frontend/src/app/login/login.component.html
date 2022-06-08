@@ -1,13 +1,22 @@
-<div class="for-container" >
-  <div class="div-container" >
-    <div>
-      <input class="input-user" type="text" placeholder="Usuario"  [(ngModel)]="user">
-    </div>
-    <div>
-      <input class="input-password" type="text" placeholder="Contraseña" [(ngModel)]="password">
-    </div>
-    <div>
-      <Button class="btn-login" (click)="login()" >Ingresar</Button>
+<div class="wallpaper">
+  <div class="blur">
+    <div class="form-container">
+      <h3>
+        Cash<span>point</span>
+      </h3>
+
+      <div class="div-container">
+        <div>
+          <input class="input-user" type="text" placeholder="Usuario"  [(ngModel)]="user.username">
+        </div>
+        <div>
+          <input class="input-password" type="password" placeholder="Contraseña" [(ngModel)]="user.password">
+        </div>
+        <div>
+          <button class="btn-primary" (click)="validateLogin()"> <span>Ingresar</span> <mat-icon>login</mat-icon> </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+

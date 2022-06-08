@@ -7,12 +7,14 @@ const product_controller_1 = require("../controllers/product.controller");
 router.post('/', verifyToken_1.tokenValidation, product_controller_1.createProduct);
 router.get('/', verifyToken_1.tokenValidation, product_controller_1.getProducts);
 router.get('/:id', verifyToken_1.tokenValidation, product_controller_1.identifyById);
+router.get('/barcode/:barcode', verifyToken_1.tokenValidation, product_controller_1.identifyByBarcode);
 router.get('/reactivate/:id', verifyToken_1.tokenValidation, product_controller_1.reactivateProduct);
 router.delete('/:id', verifyToken_1.tokenValidation, product_controller_1.deleteProduct);
 router.patch('/name/:id', verifyToken_1.tokenValidation, product_controller_1.setName);
 router.patch('/description/:id', verifyToken_1.tokenValidation, product_controller_1.setDescription);
 router.patch('/stock/:id', verifyToken_1.tokenValidation, product_controller_1.setStock);
 router.patch('/price/:id', verifyToken_1.tokenValidation, product_controller_1.setPrice);
+router.patch('/brand/:id', verifyToken_1.tokenValidation, product_controller_1.setBrand);
 router.patch('/barcode/:id', verifyToken_1.tokenValidation, product_controller_1.setBarcode);
 exports.default = router;
 //# sourceMappingURL=product.js.map

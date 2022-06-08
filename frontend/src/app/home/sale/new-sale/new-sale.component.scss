@@ -1,0 +1,143 @@
+main {
+  padding: 3% 10% 0;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    mat-icon {
+      font-size: 2em;
+      color: var(--primary-color);
+      cursor: pointer;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      font-size: 3em;
+    }
+  }
+
+  .search-products {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    margin-top: 1em;
+
+    > div {
+      padding: 1em;
+      box-shadow: 1px 1px 5px 0 #bbb;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      input {
+        font-size: 1.2em;
+        width: 100%;
+      }
+    }
+
+    .container-filter-all {
+      position: relative;
+
+      > span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        mat-icon {
+          cursor: pointer;
+        }
+      }
+
+      div {
+        width: 100%;
+        position: absolute;
+        padding: 1em;
+        top: 4em;
+        left: 0;
+        box-shadow: 1px 1px 5px 0 #bbb;
+        max-height: 20vh;
+        overflow-y: scroll;
+        background-color: #fff;
+
+        span {
+          width: 100%;
+          padding: 1em;
+          display: block;
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--primary-color-transparent);
+          }
+        }
+      }
+    }
+  }
+
+  .sale-products {
+    padding: 1em;
+
+    h2 {
+      padding-block: 1em;
+    }
+
+    .sale-products-header, .sale-products-body div {
+      display: grid;
+      grid-template-columns: .5fr 1fr 1fr .5fr .5fr .5fr 1fr 1fr .8fr .5fr;
+      padding: 1em;
+      border-bottom: 1px solid #bbb;
+    }
+
+    .sale-products-header span {
+      font-weight: bold;
+    }
+
+    .sale-products-body{
+      max-height: 50vh;
+      overflow-y: scroll;
+
+      div {
+        align-items: center;
+
+        input {
+          width: 3em;
+          font-size: 1.1em;
+          border: 1px solid #999999;
+          border-radius: 2px;
+          padding: 3px;
+        }
+
+        span:last-child {
+          padding-left: 1.2em;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .total-data {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1em;
+
+    span {
+      border-bottom: 1px solid #bbb;
+      padding-bottom: 1em;
+
+      input, label {
+        font-size: 1.2em;
+      }
+
+      input {
+        width: 3em;
+        padding-left: 1em;
+      }
+    }
+  }
+}

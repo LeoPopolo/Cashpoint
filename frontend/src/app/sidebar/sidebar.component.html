@@ -1,27 +1,37 @@
-<div class="div-container" >
+<div class="div-container">
 
-    <h3>
-      Cashpoint
-    </h3>
+  <h3>
+    Cash<span>point</span>
+  </h3>
 
-  <div>
+  <div routerLink="products">
+    <mat-icon>store_front</mat-icon>
     <span>
       Productos
     </span>
   </div>
-  <div>
+  <div routerLink="sales">
+    <mat-icon>attach_money</mat-icon>
     <span>
       Ventas
     </span>
   </div>
-  <div>
+  <div routerLink="products">
+    <mat-icon>savings</mat-icon>
+    <span>
+      Caja
+    </span>
+  </div>
+  <div routerLink="users" *ngIf="role === 'admin'">
+    <mat-icon>group</mat-icon>
     <span>
       Usuarios
     </span>
   </div>
-  <div>
+  <div class="logout" (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon>
     <span>
-      Caja
+      Cerrar sesión
     </span>
   </div>
 </div>

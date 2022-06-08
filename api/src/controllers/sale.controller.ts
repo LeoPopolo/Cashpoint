@@ -12,207 +12,77 @@ export async function createSale(req: Request, res: Response) {
                                     req.body.payment_method, 
                                     req.body.discount
                                 );
-    await conn.query(`INSERT INTO sale (
-                        products, 
-                        user_owner_id, 
-                        total, 
-                        payment_method, 
-                        status, 
-                        discount
-                    ) VALUES (
-                        ${sale.toString()}
-                    )
-                    RETURNING id`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(async response => {
+    await conn.query(`SELECT create_sale(${sale.toString()})`)
+    .then(response => {
 
-        sale.id = (response as any).rows[0].id;
+        let json_response = JSON.parse((response as any).rows[0].create_sale);
+
+        sale.id = json_response.id;
+        sale.total = json_response.total;
 
         res.status(200).json({
             status: 'OK',
-            data: sale
+            data: sale.responseDto()
         });
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(400).send(err);
     });
 };
 
-export async function getProducts(req: Request, res: Response) {
-    var productsArray = [];
+export async function getSales(req: Request, res: Response) {
 
-    await conn.query(`SELECT id, name, description, price, stock, barcode
-                        FROM product
-                        WHERE deleted = FALSE
-                        ORDER BY id ASC`)
+    const page = req.query.page;
+    let total = req.query.total ? req.query.total : null;
+    let paymentMethod = req.query.payment_method ? req.query.payment_method : null;
+    let dateFrom = req.query.date_from ? req.query.date_from : null;
+    let dateTo = req.query.date_to ? req.query.date_to : null;
+
+    if (paymentMethod && paymentMethod !== 'null') {
+        paymentMethod = "'" + paymentMethod + "'"; 
+    }
+
+    if (dateFrom && dateFrom !== 'null') {
+        dateFrom = "'" + dateFrom + "'"; 
+    }
+
+    if (dateTo && dateTo !== 'null') {
+        dateTo = "'" + dateTo + "'"; 
+    }
+
+    await conn.query(`SELECT search_sales(${page}, ${total}, ${paymentMethod}, ${dateFrom}, ${dateTo})`)
+    .then(response => {
+
+        const data = JSON.parse((response as any).rows[0].search_sales);
+
+        if (!data.sales) {
+            data.sales = [];
+        }
+
+        res.status(200).json({
+            data: data
+        });         
+    })
     .catch(err => {
         return res.status(400).send(err);
-    })
-    .then(resp => {
-
-        if((resp as any).rows.length === 0) {
-            return res.status(404).json({
-                error: 'No data found'
-            });
-        } else {
-            productsArray = (resp as any).rows;
-    
-            res.status(200).json({
-                status: 'OK',
-                data: productsArray
-            }); 
-        }
     });
 }
 
 export async function identifyById(req: Request, res: Response) {
 
-    await conn.query(`SELECT id, name, description, price, stock, barcode
-                        FROM product
-                        WHERE deleted = FALSE AND id = ${req.params.id}`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
-    .then(resp => {
+    await conn.query(`SELECT sale_identify_by_id(${req.params.id})`)
+    .then(response => {
 
-        if((resp as any).rows.length === 0) {
-            return res.status(404).json({
-                error: 'No data found'
-            });
-        } else {
-            let product = (resp as any).rows;
-    
-            res.status(200).json({
-                status: 'OK',
-                data: product
-            }); 
-        }
-    });
-}
+        const data = JSON.parse((response as any).rows[0].sale_identify_by_id);
 
-export async function deleteProduct(req: Request, res: Response) {
-
-    await conn.query(`UPDATE product
-                        SET deleted = TRUE
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
-    .then(() => {
+        const parsedData = data ? data : 'Sale not found';
 
         res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
+            data: parsedData
         }); 
-    });
-}
-
-export async function reactivateProduct(req: Request, res: Response) {
-    var productsArray = [];
-
-    await conn.query(`UPDATE product
-                        SET deleted = FALSE
-                        WHERE id = ${req.params.id}`)
+    })
     .catch(err => {
         return res.status(400).send(err);
-    })
-    .then(resp => {
-
-        productsArray = (resp as any).rows;
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
-    });
-}
-
-export async function setName(req: Request, res: Response) {
-
-    await conn.query(`UPDATE product
-                        SET name = '${req.body.name}'
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(() => {
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
-    });
-}
-
-export async function setDescription(req: Request, res: Response) {
-
-    await conn.query(`UPDATE product
-                        SET description = '${req.body.description}'
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(() => {
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
-    });
-}
-
-export async function setStock(req: Request, res: Response) {
-    
-    await conn.query(`UPDATE product
-                        SET stock = ${req.body.stock}
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(() => {
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
-    });
-}
-
-export async function setPrice(req: Request, res: Response) {
-    
-    await conn.query(`UPDATE product
-                        SET price = ${req.body.price}
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(() => {
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
-    });
-}
-
-export async function setBarcode(req: Request, res: Response) {
-    
-    await conn.query(`UPDATE product
-                        SET barcode = ${req.body.barcode}
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
-    .then(() => {
-
-        res.status(200).json({
-            status: 'OK',
-            message: 'Operation completed'
-        }); 
     });
 }

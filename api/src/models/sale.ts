@@ -15,18 +15,19 @@ export class Sale {
         user_owner_id: number,
         payment_method: PaymentMethod,
         discount: number, 
-        id?: number
+        id?: number,
+        total?: number
     ) { 
         this.products = products;
         this.user_owner_id = user_owner_id;
         this.payment_method = payment_method;
-        this.status = SaleStatus.Open;
+        this.status = SaleStatus.Closed;
         this.discount = discount;
 
         this.total = 0;
 
-        for (let item of this.products) {
-            this.total = item.price * item.quantity;
+        if (total) {
+            this.total = total;
         }
 
         if (id) {
@@ -38,7 +39,7 @@ export class Sale {
         let response = 'array[';
 
         for (let item of this.products) {
-            response += '(' + item.id + ',' + item.quantity + '),'
+            response += `(${item.id}, '${item.name}', '${item.description}', ${item.price}, '${item.barcode}', '${item.brand}', ${item.quantity}),`;
         }
 
         response = response.substring(0, response.length - 1);
@@ -49,19 +50,19 @@ export class Sale {
     }
 
     toString(){
-        return `${this.parseProducts()},${this.user_owner_id},${this.total},'${this.payment_method}','${this.status}',${this.discount}`;
+        return `${this.parseProducts()},${this.user_owner_id},'${this.payment_method}',${this.discount}`;
     }
 
-    // responseDto() {
-    //     const product: any = {
-    //         id: this.id,
-    //         name: this.name,
-    //         description: this.description,
-    //         price: this.price,
-    //         stock: this.stock,
-    //         barcode: this.barcode
-    //     }
+    responseDto() {
+        const sale: any = {
+            id: this.id,
+            user_owner_id: this.user_owner_id,
+            total: this.total,
+            discount: this.discount,
+            payment_method: this.payment_method,
+            status: this.status
+        }
 
-    //     return product;
-    // }
+        return sale;
+    }
 }

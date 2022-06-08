@@ -1,0 +1,25 @@
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+form {
+
+  div {
+    display: flex;
+    justify-content: center;
+    margin-top: .5em;
+
+    input, mat-select {
+      border-bottom: 1px solid #bbb;
+      padding: .7em 1em;
+      font-size: 1.1em;
+      width: 80%;
+    }
+
+    button {
+      margin-top: 1em;
+    }
+  }
+}
