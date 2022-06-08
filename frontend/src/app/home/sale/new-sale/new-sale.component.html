@@ -9,7 +9,12 @@
 
   <div class="search-products">
     <div>
-      <input type="text" placeholder="Código de barras" [(ngModel)]="productFilterBarcode" (keyup.enter)="identifyByBarcode()">
+      <input type="text"
+              placeholder="Código de barras"
+              [(ngModel)]="productFilterBarcode"
+              (keyup.enter)="identifyByBarcode()"
+              #barcode
+      >
     </div>
     <div class="container-filter-all">
       <span>

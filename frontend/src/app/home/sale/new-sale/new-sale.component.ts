@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import { Product } from '../../product/product.component';
   templateUrl: './new-sale.component.html',
   styleUrls: ['./new-sale.component.scss']
 })
-export class NewSaleComponent implements OnInit {
+export class NewSaleComponent implements OnInit, AfterViewInit {
 
   userData: any;
 
@@ -40,6 +40,8 @@ export class NewSaleComponent implements OnInit {
   discount: number = 0;
   payment_method: string = '';
 
+  @ViewChild("barcode") inputBarcode!: ElementRef;
+
   constructor(
     private productServices: ProductService,
     private saleServices: SaleService,
@@ -49,9 +51,14 @@ export class NewSaleComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     await this.getProducts();
 
     this.userData = JSON.parse(localStorage.getItem('userData')!);
+  }
+
+  ngAfterViewInit(): void {
+    this.inputBarcode.nativeElement.focus();
   }
 
   filterAllData() {
