@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
-export async function signup(req: Request, res: Response) {
+export async function createUser(req: Request, res: Response) {
     
     const user: User = new User(req.body.username, req.body.name, req.body.surname, req.body.email, req.body.role, req.body.password);
     
@@ -16,10 +16,6 @@ export async function signup(req: Request, res: Response) {
     }
 
     await conn.query(`INSERT INTO system_user (username,name,surname,email,role,password) VALUES (${user.toString()}) RETURNING id`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(async response => {
         
         const token = jwt.sign({
@@ -33,16 +29,15 @@ export async function signup(req: Request, res: Response) {
             token: token,
             data: user
         });
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 };
 
 export async function signin(req: Request, res: Response) {
 
-    await conn.query(`SELECT * FROM system_user WHERE username = '${req.body.username}'`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
+    await conn.query(`SELECT * FROM system_user WHERE username = '${req.body.username}' AND deleted = FALSE`)
     .then(async resp => {
 
         if((resp as any).rows.length === 0 || (resp as any).rows === null || (resp as any).rows === undefined) {
@@ -79,17 +74,17 @@ export async function signin(req: Request, res: Response) {
     
         }
     })
+    .catch(err => {
+        return res.status(400).send(err);
+    });
 }
 
 export async function users(req: Request, res: Response) {
     let usersArray = [];
 
-    await conn.query(`SELECT id, username, name, surname, email
+    await conn.query(`SELECT id, username, name, surname, email, role
                         FROM system_user
-                        WHERE 1=1`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
+                        WHERE deleted = FALSE`)
     .then(resp => {
 
         if((resp as any).rows.length === 0) {
@@ -104,6 +99,9 @@ export async function users(req: Request, res: Response) {
                 data: usersArray
             }); 
         }
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -111,10 +109,7 @@ export async function identifyById(req: Request, res: Response) {
 
     await conn.query(`SELECT id, username, name, surname, email, role
                         FROM system_user
-                        WHERE id = ${req.params.id}`)
-    .catch(err => {
-        return res.status(400).send(err);
-    })
+                        WHERE id = ${req.params.id} AND deleted = FALSE`)
     .then(resp => {
 
         if((resp as any).rows.length === 0) {
@@ -129,6 +124,43 @@ export async function identifyById(req: Request, res: Response) {
                 data: user
             }); 
         }
+    })
+    .catch(err => {
+        return res.status(400).send(err);
+    });
+}
+
+export async function deleteUser(req: Request, res: Response) {
+
+    await conn.query(`UPDATE system_user
+                        SET deleted = TRUE
+                        WHERE id = ${req.params.id}`)
+    .then(() => {
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'Operation completed'
+        }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
+    });
+}
+
+export async function reactivateUser(req: Request, res: Response) {
+
+    await conn.query(`UPDATE system_user
+                        SET deleted = FALSE
+                        WHERE id = ${req.params.id}`)
+    .then(() => {
+
+        res.status(200).json({
+            status: 'OK',
+            message: 'Operation completed'
+        }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -137,16 +169,15 @@ export async function setName(req: Request, res: Response) {
     await conn.query(`UPDATE system_user
                         SET name = '${req.body.name}'
                         WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(() => {
 
         res.status(200).json({
             status: 'OK',
             message: 'Operation completed'
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -155,16 +186,15 @@ export async function setSurname(req: Request, res: Response) {
     await conn.query(`UPDATE system_user
                         SET surname = '${req.body.surname}'
                         WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(() => {
 
         res.status(200).json({
             status: 'OK',
             message: 'Operation completed'
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -173,16 +203,15 @@ export async function setEmail(req: Request, res: Response) {
     await conn.query(`UPDATE system_user
                         SET email = '${req.body.email}'
                         WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(() => {
 
         res.status(200).json({
             status: 'OK',
             message: 'Operation completed'
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -191,16 +220,15 @@ export async function setRole(req: Request, res: Response) {
     await conn.query(`UPDATE system_user
                         SET role = '${req.body.role}'
                         WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(() => {
 
         res.status(200).json({
             status: 'OK',
             message: 'Operation completed'
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }
 
@@ -217,15 +245,14 @@ export async function setPassword(req: Request, res: Response) {
     await conn.query(`UPDATE system_user
                         SET password = '${user.password}'
                         WHERE id = ${req.params.id}`)
-    .catch(err => {
-        console.log(err);
-        return res.status(400).send(err);
-    })
     .then(() => {
 
         res.status(200).json({
             status: 'OK',
             message: 'Operation completed'
         }); 
+    })
+    .catch(err => {
+        return res.status(400).send(err);
     });
 }

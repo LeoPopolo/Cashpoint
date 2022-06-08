@@ -1,0 +1,33 @@
+<h1>Nuevo usuario</h1>
+
+<form [formGroup]="addUserForm">
+  <div class="input-container">
+    <input type="text" formControlName="name" placeholder="Nombre">
+  </div>
+  <div class="input-container">
+    <input type="text" formControlName="surname" placeholder="Apellido">
+  </div>
+  <div class="input-container">
+    <input type="text" formControlName="username" placeholder="DNI">
+  </div>
+  <div class="input-container">
+    <input type="email" formControlName="email" placeholder="E-mail">
+  </div>
+  <div class="input-container">
+    <mat-select formControlName="role">
+      <mat-option [value]="'admin'">Administrador</mat-option>
+      <mat-option [value]="'seller'">Vendedor</mat-option>
+    </mat-select>
+  </div>
+  <div class="input-container" *ngIf="!editBool">
+    <input type="password" formControlName="password1" placeholder="Contraseña">
+  </div>
+  <div class="input-container" *ngIf="!editBool">
+    <input type="password" formControlName="password2" placeholder="Repetir contraseña">
+  </div>
+
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="validateForm()" *ngIf="!editBool">Agregar</button>
+    <button class="btn-primary" (click)="saveChanges()" *ngIf="editBool">Guardar cambios</button>
+  </div>
+</form>

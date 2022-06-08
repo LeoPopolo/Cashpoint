@@ -1,0 +1,33 @@
+<main>
+  <h1>Usuarios</h1>
+
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="openDialogCreateEditUser('create')"> <mat-icon>add</mat-icon> <span>Nuevo usuario</span></button>
+  </div>
+
+  <div class="table">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Usuario</span>
+      <span>Nombre</span>
+      <span>Apellido</span>
+      <span>E-mail</span>
+      <span>Rol</span>
+      <span>Acciones</span>
+    </div>
+    <div class="table-body">
+      <div class="table-body-element" *ngFor="let item of usersList">
+        <span>#{{item.id}}</span>
+        <span>{{item.username}}</span>
+        <span>{{item.name}}</span>
+        <span>{{item.surname}}</span>
+        <span>{{item.email}}</span>
+        <span>{{parseRole(item.role)}}</span>
+        <span class="actions-element">
+          <mat-icon (click)="openDialogCreateEditUser('edit', item.id!)">edit</mat-icon>
+          <mat-icon (click)="openDialogDelete(item.id!, item.name)">delete</mat-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,95 @@
+main {
+  padding: 3% 10% 0;
+
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 3em;
+  }
+
+  .buttons-container {
+    padding-block: 1em;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3%;
+
+    button {
+      span {
+        display: inline-flex;
+        align-items: center;
+        margin-left: .5em;
+      }
+    }
+
+    > span {
+      position: relative;
+      display: flex;
+      align-items: center;
+      box-shadow: 1px 1px 5px 0 #bbb;
+      border-radius: 100px;
+      padding-inline: 1em;
+      cursor: pointer;
+
+      mat-icon {
+        margin-right: .5em;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .table {
+
+    .table-head {
+      display: grid;
+      grid-template-columns: .5fr 1fr 1fr 1fr 1.3fr 1fr 1fr;
+      padding: 1em;
+      background-color: var(--primary-color);
+      color: #fff;
+      border-radius: 10px;
+    }
+
+    .table-body {
+      max-height: 60vh;
+      overflow-y: scroll;
+
+      .table-body-element {
+        display: grid;
+        grid-template-columns: .5fr 1fr 1fr 1fr 1.3fr 1fr 1fr;
+        padding: 1em;
+        margin-top: 1em;
+        box-shadow: 1px 1px 5px 0 #bbb;
+
+        .actions-element {
+          color: var(--primary-color);
+
+          mat-icon {
+            cursor: pointer;
+            margin-left: .4em;
+          }
+        }
+      }
+
+      &::-webkit-scrollbar {
+        -webkit-appearance: none;
+      }
+
+      &::-webkit-scrollbar:vertical {
+        width:2px;
+      }
+
+      &::-webkit-scrollbar-button:increment, &::-webkit-scrollbar-button {
+        display: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--primary-color);
+        border-radius: 20px;
+        border: 2px solid var(--primary-color);
+      }
+
+      &::-webkit-scrollbar-track {
+        border-radius: 10px;
+      }
+    }
+  }
+}

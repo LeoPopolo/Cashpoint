@@ -3,7 +3,7 @@ import { tokenValidation } from '../libs/verifyToken';
 
 const router: Router = Router();
 
-import { signup, 
+import { createUser, 
          signin, 
          users, 
          identifyById, 
@@ -11,14 +11,19 @@ import { signup,
          setSurname,
          setEmail, 
          setPassword, 
-         setRole }  from '../controllers/auth.controller';
+         setRole, 
+         deleteUser,
+         reactivateUser}  from '../controllers/auth.controller';
 
-router.post('/signup', signup);
 router.post('/signin', signin);
+router.post('/', tokenValidation, createUser);
 
-router.get('/users', tokenValidation, users);
+router.get('/', tokenValidation, users);
 router.get('/:id', tokenValidation, identifyById);
 
+router.delete('/:id', tokenValidation, deleteUser);
+
+router.patch('/reactivate/:id', tokenValidation, reactivateUser);
 router.patch('/name/:id', tokenValidation, setName);
 router.patch('/surname/:id', tokenValidation, setSurname);
 router.patch('/email/:id', tokenValidation, setEmail);

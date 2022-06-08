@@ -51,7 +51,8 @@ export class User {
             name: this.name,
             surname: this.surname,
             username: this.username,
-            email: this.email
+            email: this.email,
+            role: this.role
         }
 
         return user;

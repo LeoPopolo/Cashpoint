@@ -8,6 +8,7 @@ import { ProductComponent } from './product/product.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { NewSaleComponent } from './sale/new-sale/new-sale.component';
     ProductComponent,
     HomeComponent,
     NewSaleComponent,
+    UsersComponent,
   ],
   imports: [
     CommonModule,

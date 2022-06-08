@@ -22,7 +22,7 @@
       Caja
     </span>
   </div>
-  <div routerLink="products">
+  <div routerLink="users" *ngIf="role === 'admin'">
     <mat-icon>group</mat-icon>
     <span>
       Usuarios

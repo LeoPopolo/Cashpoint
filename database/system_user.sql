@@ -4,7 +4,8 @@ CREATE TABLE system_user (
     surname         text,
     email           text,
     role            text,
-    password        text
+    password        text,
+    deleted         boolean DEFAULT FALSE
 ) INHERITS (
 	core_object
 );

@@ -4,6 +4,7 @@ import { HomeComponent } from './home.component';
 import { ProductComponent } from './product/product.component';
 import { SaleComponent } from './sale/sale.component';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,16 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'new-sale',
+        pathMatch: 'full'
+      },
+      {
+        path: 'users',
+        component: UsersComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: '',
+        redirectTo: 'users',
         pathMatch: 'full'
       },
     ],

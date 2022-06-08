@@ -12,13 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setPassword = exports.setRole = exports.setEmail = exports.setSurname = exports.setName = exports.identifyById = exports.users = exports.signin = exports.signup = void 0;
+exports.setPassword = exports.setRole = exports.setEmail = exports.setSurname = exports.setName = exports.reactivateUser = exports.deleteUser = exports.identifyById = exports.users = exports.signin = exports.createUser = void 0;
 const user_1 = require("../models/user");
 const database_1 = __importDefault(require("../database"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-function signup(req, res) {
+function createUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = new user_1.User(req.body.username, req.body.name, req.body.surname, req.body.email, req.body.role, req.body.password);
         const tmp_pass = yield user.encryptPassword(req.body.password);
@@ -26,10 +26,6 @@ function signup(req, res) {
             user.password = tmp_pass;
         }
         yield database_1.default.query(`INSERT INTO system_user (username,name,surname,email,role,password) VALUES (${user.toString()}) RETURNING id`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then((response) => __awaiter(this, void 0, void 0, function* () {
             const token = jsonwebtoken_1.default.sign({
                 _id: user.username
@@ -40,18 +36,17 @@ function signup(req, res) {
                 token: token,
                 data: user
             });
-        }));
+        }))
+            .catch(err => {
+            return res.status(400).send(err);
+        });
     });
 }
-exports.signup = signup;
+exports.createUser = createUser;
 ;
 function signin(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield database_1.default.query(`SELECT * FROM system_user WHERE username = '${req.body.username}'`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
+        yield database_1.default.query(`SELECT * FROM system_user WHERE username = '${req.body.username}' AND deleted = FALSE`)
             .then((resp) => __awaiter(this, void 0, void 0, function* () {
             if (resp.rows.length === 0 || resp.rows === null || resp.rows === undefined) {
                 return res.status(400).json({
@@ -73,19 +68,19 @@ function signin(req, res) {
                     data: user.responseDto()
                 });
             }
-        }));
+        }))
+            .catch(err => {
+            return res.status(400).send(err);
+        });
     });
 }
 exports.signin = signin;
 function users(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let usersArray = [];
-        yield database_1.default.query(`SELECT id, username, name, surname, email
+        yield database_1.default.query(`SELECT id, username, name, surname, email, role
                         FROM system_user
-                        WHERE 1=1`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
+                        WHERE deleted = FALSE`)
             .then(resp => {
             if (resp.rows.length === 0) {
                 return res.status(404).json({
@@ -99,6 +94,9 @@ function users(req, res) {
                     data: usersArray
                 });
             }
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -107,10 +105,7 @@ function identifyById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield database_1.default.query(`SELECT id, username, name, surname, email, role
                         FROM system_user
-                        WHERE id = ${req.params.id}`)
-            .catch(err => {
-            return res.status(400).send(err);
-        })
+                        WHERE id = ${req.params.id} AND deleted = FALSE`)
             .then(resp => {
             if (resp.rows.length === 0) {
                 return res.status(404).json({
@@ -124,24 +119,60 @@ function identifyById(req, res) {
                     data: user
                 });
             }
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
 exports.identifyById = identifyById;
-function setName(req, res) {
+function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         yield database_1.default.query(`UPDATE system_user
-                        SET name = '${req.body.name}'
+                        SET deleted = TRUE
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.deleteUser = deleteUser;
+function reactivateUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`UPDATE system_user
+                        SET deleted = FALSE
+                        WHERE id = ${req.params.id}`)
+            .then(() => {
+            res.status(200).json({
+                status: 'OK',
+                message: 'Operation completed'
+            });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.reactivateUser = reactivateUser;
+function setName(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`UPDATE system_user
+                        SET name = '${req.body.name}'
+                        WHERE id = ${req.params.id}`)
+            .then(() => {
+            res.status(200).json({
+                status: 'OK',
+                message: 'Operation completed'
+            });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -151,15 +182,14 @@ function setSurname(req, res) {
         yield database_1.default.query(`UPDATE system_user
                         SET surname = '${req.body.surname}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -169,15 +199,14 @@ function setEmail(req, res) {
         yield database_1.default.query(`UPDATE system_user
                         SET email = '${req.body.email}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -187,15 +216,14 @@ function setRole(req, res) {
         yield database_1.default.query(`UPDATE system_user
                         SET role = '${req.body.role}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
@@ -210,15 +238,14 @@ function setPassword(req, res) {
         yield database_1.default.query(`UPDATE system_user
                         SET password = '${user.password}'
                         WHERE id = ${req.params.id}`)
-            .catch(err => {
-            console.log(err);
-            return res.status(400).send(err);
-        })
             .then(() => {
             res.status(200).json({
                 status: 'OK',
                 message: 'Operation completed'
             });
+        })
+            .catch(err => {
+            return res.status(400).send(err);
         });
     });
 }
