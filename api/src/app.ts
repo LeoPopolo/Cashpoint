@@ -6,6 +6,7 @@ const app: Application = express();
 import authRoutes from './routes/auth';
 import productRoutes from './routes/product';
 import saleRoutes from './routes/sale';
+import customerRoutes from './routes/customer';
 
 // settings
 
@@ -29,5 +30,6 @@ app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/sale', saleRoutes);
+app.use('/api/customer', customerRoutes);
 
 export default app;
