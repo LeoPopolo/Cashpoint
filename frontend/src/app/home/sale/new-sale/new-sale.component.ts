@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import { Product } from '../../product/product.component';
   templateUrl: './new-sale.component.html',
   styleUrls: ['./new-sale.component.scss']
 })
-export class NewSaleComponent implements OnInit {
+export class NewSaleComponent implements OnInit, AfterViewInit {
 
   userData: any;
 
@@ -40,6 +40,8 @@ export class NewSaleComponent implements OnInit {
   discount: number = 0;
   payment_method: string = '';
 
+  @ViewChild("barcode") inputBarcode!: ElementRef;
+
   constructor(
     private productServices: ProductService,
     private saleServices: SaleService,
@@ -49,9 +51,14 @@ export class NewSaleComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     await this.getProducts();
 
     this.userData = JSON.parse(localStorage.getItem('userData')!);
+  }
+
+  ngAfterViewInit(): void {
+    this.inputBarcode.nativeElement.focus();
   }
 
   filterAllData() {
@@ -138,16 +145,20 @@ export class NewSaleComponent implements OnInit {
       width: '350px'
     }
 
-    const dialogRef = this.dialog.open(DialogCloseSaleComponent, dialogOptions);
+    if (this.saleProducts.length > 0) {
+      const dialogRef = this.dialog.open(DialogCloseSaleComponent, dialogOptions);
 
-    dialogRef.afterClosed().subscribe( async result => {
+      dialogRef.afterClosed().subscribe( async result => {
 
-      if (result.close) {
-        this.payment_method = result.payment_method;
+        if (result.close) {
+          this.payment_method = result.payment_method;
 
-        await this.closeSale();
-      }
-    });
+          await this.closeSale();
+        }
+      });
+    } else {
+      this.openSnackbar('No hay productos cargados en la venta');
+    }
   }
 
   async closeSale() {

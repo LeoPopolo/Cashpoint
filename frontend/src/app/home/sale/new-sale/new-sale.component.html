@@ -9,7 +9,12 @@
 
   <div class="search-products">
     <div>
-      <input type="text" placeholder="Código de barras" [(ngModel)]="productFilterBarcode" (keyup.enter)="identifyByBarcode()">
+      <input type="text"
+              placeholder="Código de barras"
+              [(ngModel)]="productFilterBarcode"
+              (keyup.enter)="identifyByBarcode()"
+              #barcode
+      >
     </div>
     <div class="container-filter-all">
       <span>
@@ -49,8 +54,8 @@
         <span>{{item.id}}</span>
         <span>{{item.name}}</span>
         <span>{{item.description}}</span>
-        <span>{{item.price}}</span>
-        <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateTotal()">
+        <span>${{item.price}}</span>
+        <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateTotal()" max="{{item.stock}}">
         <span>{{item.stock}}</span>
         <span>{{item.brand}}</span>
         <span>{{item.barcode}}</span>

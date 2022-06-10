@@ -1,4 +1,8 @@
 main {
   display: grid;
   grid-template-columns: 15vw 0 85vw;
+
+  @media (max-width: 1370px) {
+    grid-template-columns: 18vw 0 82vw;
+  }
 }
