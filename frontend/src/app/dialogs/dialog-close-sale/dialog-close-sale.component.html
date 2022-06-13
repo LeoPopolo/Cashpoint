@@ -2,12 +2,15 @@
   <h3>¿Desea cerrar la venta?</h3>
   <div>
     <h4>Método de pago</h4>
-    <mat-select [(ngModel)]="payment_method">
+    <mat-select [(ngModel)]="paymentMethod">
       <mat-option [value]="'efectivo'">Efectivo</mat-option>
       <mat-option [value]="'débito'">Débito</mat-option>
       <mat-option [value]="'crédito'">Crédito</mat-option>
       <mat-option [value]="'mercadopago'">Mercado pago</mat-option>
       <mat-option [value]="'transferencia'">Transferencia bancaria</mat-option>
+    </mat-select>
+    <mat-select [(ngModel)]="selectedCustomerID">
+      <mat-option [value]="item.id" *ngFor="let item of customerList">{{item.name}}</mat-option>
     </mat-select>
   </div>
   <div class="buttons-container">

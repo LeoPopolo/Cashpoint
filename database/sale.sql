@@ -9,8 +9,9 @@ CREATE TYPE sale_item AS (
 );
 
 CREATE TABLE sale (
-    products            sale_item[],
+    products                sale_item[],
     user_owner_id           int,
+    customer                customer,
     total                   real,
     payment_method          text,
     status                  text,
@@ -23,7 +24,8 @@ CREATE OR REPLACE FUNCTION create_sale (
     p_items				    sale_item[],
     p_user_owner_id    	    int,
     p_payment_method     	text,
-    p_discount  			real
+    p_discount  			real,
+    p_customer_id           int
 )
 RETURNS text AS $$
 DECLARE
@@ -33,6 +35,7 @@ DECLARE
 	v_sale_status			text;
 	v_current_stock			int;
     v_price				    real;
+    v_customer              customer;
 BEGIN
 
     FOREACH v_item IN ARRAY p_items
@@ -53,9 +56,12 @@ BEGIN
         v_total := v_total - (v_total * p_discount / 100);
     END IF;
 
+    v_customer := get_customer_by_id(p_customer_id);
+
     INSERT INTO sale (
         products, 
         user_owner_id, 
+        customer,
         total, 
         payment_method, 
         status, 
@@ -63,6 +69,7 @@ BEGIN
     ) VALUES (
         p_items, 
         p_user_owner_id, 
+        v_customer,
         v_total, 
         p_payment_method, 
         'closed',

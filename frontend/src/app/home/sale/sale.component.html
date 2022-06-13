@@ -44,6 +44,7 @@
       <span>Estado</span>
       <span>Método de pago</span>
       <span>Descuento</span>
+      <span>Cliente</span>
       <span>Fecha y hora</span>
       <span>Acciones</span>
     </div>
@@ -54,6 +55,7 @@
         <span>{{parseStatus(item.status)}}</span>
         <span>{{item.payment_method}}</span>
         <span>{{item.discount}}%</span>
+        <span>{{item.customer.name}}</span>
         <span>{{item.creation_timestamp | date:'short'}}</span>
         <span class="actions-element">
           <mat-icon (click)="openDialogSeeSale(item.id)">visibility</mat-icon>

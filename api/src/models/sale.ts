@@ -1,10 +1,12 @@
 import { PaymentMethod } from '../shared/PaymentMethodEnum';
 import { SaleStatus } from '../shared/SaleStatusEnum';
+import { Customer } from './customer';
 
 export class Sale {
     id: number;
     products: Array<any>;
     user_owner_id: number;
+    customer: Customer;
     total: number;
     payment_method: PaymentMethod;
     status: SaleStatus;
@@ -14,7 +16,7 @@ export class Sale {
         products: Array<any>,
         user_owner_id: number,
         payment_method: PaymentMethod,
-        discount: number, 
+        discount: number,
         id?: number,
         total?: number
     ) { 
@@ -49,8 +51,8 @@ export class Sale {
         return response;
     }
 
-    toString(){
-        return `${this.parseProducts()},${this.user_owner_id},'${this.payment_method}',${this.discount}`;
+    toString(customer_id: number){
+        return `${this.parseProducts()},${this.user_owner_id},'${this.payment_method}',${this.discount},${customer_id}`;
     }
 
     responseDto() {
@@ -60,7 +62,8 @@ export class Sale {
             total: this.total,
             discount: this.discount,
             payment_method: this.payment_method,
-            status: this.status
+            status: this.status,
+            customer: this.customer
         }
 
         return sale;

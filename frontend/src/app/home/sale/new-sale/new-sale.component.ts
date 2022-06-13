@@ -39,6 +39,7 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
   total: number = 0;
   discount: number = 0;
   payment_method: string = '';
+  customer_id: number = 1;
 
   @ViewChild("barcode") inputBarcode!: ElementRef;
 
@@ -152,6 +153,7 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
 
         if (result.close) {
           this.payment_method = result.payment_method;
+          this.customer_id = result.customer_id;
 
           await this.closeSale();
         }
@@ -167,7 +169,8 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
       user_owner_id: this.userData.id,
       payment_method: this.payment_method,
       discount: this.discount,
-      products: this.saleProducts
+      products: this.saleProducts,
+      customer_id: this.customer_id
     };
 
     await this.saleServices.createSale(body)

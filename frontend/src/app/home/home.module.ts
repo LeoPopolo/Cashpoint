@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared/material.module';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
 import { UsersComponent } from './users/users.component';
+import { CustomerComponent } from './customer/customer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { UsersComponent } from './users/users.component';
     HomeComponent,
     NewSaleComponent,
     UsersComponent,
+    CustomerComponent,
   ],
   imports: [
     CommonModule,

@@ -35,7 +35,7 @@ export async function getCustomers(req: Request, res: Response) {
                 error: 'No data found'
             });
         } else {
-            const customer = (resp as any).rows[0];
+            const customer = (resp as any).rows;
     
             res.status(200).json({
                 status: 'OK',

@@ -5,6 +5,7 @@ import { ProductComponent } from './product/product.component';
 import { SaleComponent } from './sale/sale.component';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
 import { UsersComponent } from './users/users.component';
+import { CustomerComponent } from './customer/customer.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,16 @@ const routes: Routes = [
         redirectTo: 'users',
         pathMatch: 'full'
       },
+      {
+        path: 'customers',
+        component: CustomerComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: '',
+        redirectTo: 'customers',
+        pathMatch: 'full'
+      }
     ],
   },
 ];

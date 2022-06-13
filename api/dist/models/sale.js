@@ -26,8 +26,8 @@ class Sale {
         response += ']::sale_item[]';
         return response;
     }
-    toString() {
-        return `${this.parseProducts()},${this.user_owner_id},'${this.payment_method}',${this.discount}`;
+    toString(customer_id) {
+        return `${this.parseProducts()},${this.user_owner_id},'${this.payment_method}',${this.discount},${customer_id}`;
     }
     responseDto() {
         const sale = {
@@ -36,7 +36,8 @@ class Sale {
             total: this.total,
             discount: this.discount,
             payment_method: this.payment_method,
-            status: this.status
+            status: this.status,
+            customer: this.customer
         };
         return sale;
     }

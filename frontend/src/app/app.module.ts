@@ -17,6 +17,7 @@ import localeEsAr from '@angular/common/locales/es-AR';
 import { DialogSeeSaleComponent } from './dialogs/dialog-see-sale/dialog-see-sale.component';
 import { DialogCloseSaleComponent } from './dialogs/dialog-close-sale/dialog-close-sale.component';
 import { DialogAddEditUserComponent } from './dialogs/dialog-add-edit-user/dialog-add-edit-user.component';
+import { DialogAddEditCustomerComponent } from './dialogs/dialog-add-edit-customer/dialog-add-edit-customer.component';
 
 registerLocaleData(localeEsAr, 'es-Ar');
 
@@ -28,7 +29,8 @@ registerLocaleData(localeEsAr, 'es-Ar');
     DialogConfirmComponent,
     DialogSeeSaleComponent,
     DialogCloseSaleComponent,
-    DialogAddEditUserComponent
+    DialogAddEditUserComponent,
+    DialogAddEditCustomerComponent
   ],
   imports: [
     CommonModule,

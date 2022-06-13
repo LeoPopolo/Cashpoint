@@ -3,12 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogSeeSaleComponent } from 'src/app/dialogs/dialog-see-sale/dialog-see-sale.component';
 import { SaleService } from '../../services/sale.service';
 import { Product } from '../product/product.component';
+import { Customer } from '../customer/customer.component';
 import * as moment from 'moment';
 
 export class SaleResponse {
   id: number = 0;
   total: number = 0;
   status: string = '';
+  customer: Customer = new Customer();
   payment_method: string = '';
   products: Array<Product> = [];
   creation_timestamp: Date = new Date();

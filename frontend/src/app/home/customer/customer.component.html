@@ -1,0 +1,33 @@
+<main>
+  <h1>Clientes</h1>
+
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="openDialogCreateEditCustomer('create')"> <mat-icon>add</mat-icon> <span>Nuevo cliente</span></button>
+  </div>
+
+  <div class="table">
+    <div class="table-head">
+      <span>ID</span>
+      <span>Nombre</span>
+      <span>DNI</span>
+      <span>Teléfono</span>
+      <span>R/IVA</span>
+      <span>Cliente desde</span>
+      <span>Acciones</span>
+    </div>
+    <div class="table-body">
+      <div class="table-body-element" *ngFor="let item of customersList">
+        <span>#{{item.id}}</span>
+        <span>{{item.name}}</span>
+        <span>{{item.identifier}}</span>
+        <span>{{item.phone_number}}</span>
+        <span>{{item.iva_responsability}}</span>
+        <span>{{item.creation_timestamp | date:'short'}}</span>
+        <span class="actions-element">
+          <mat-icon (click)="openDialogCreateEditCustomer('edit', item.id!)">edit</mat-icon>
+          <mat-icon (click)="openDialogDelete(item.id!, item.name)">delete</mat-icon>
+        </span>
+      </div>
+    </div>
+  </div>
+</main>

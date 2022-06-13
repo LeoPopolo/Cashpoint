@@ -1,0 +1,26 @@
+<h1>Nuevo cliente</h1>
+
+<form [formGroup]="addCustomerForm">
+  <div class="input-container">
+    <input type="text" formControlName="name" placeholder="Nombre">
+  </div>
+  <div class="input-container">
+    <input type="text" formControlName="identifier" placeholder="DNI">
+  </div>
+  <div class="input-container">
+    <input type="tel" formControlName="phone_number" placeholder="Teléfono">
+  </div>
+  <div class="input-container">
+    <mat-select formControlName="iva_responsability">
+      <mat-option [value]="'CONSUMIDOR FINAL'">Consumidor final</mat-option>
+      <mat-option [value]="'RESPONSABLE INSCRIPTO'">Responsable inscripto</mat-option>
+      <mat-option [value]="'NO RESPONSABLE'">No responsable</mat-option>
+      <mat-option [value]="'MONOTRIBUTISTA'">Monotributista</mat-option>
+    </mat-select>
+  </div>
+
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="validateForm()" *ngIf="!editBool">Agregar</button>
+    <button class="btn-primary" (click)="saveChanges()" *ngIf="editBool">Guardar cambios</button>
+  </div>
+</form>

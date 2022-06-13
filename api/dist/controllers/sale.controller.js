@@ -20,7 +20,7 @@ dotenv_1.default.config();
 function createSale(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const sale = new sale_1.Sale(req.body.products, req.body.user_owner_id, req.body.payment_method, req.body.discount);
-        yield database_1.default.query(`SELECT create_sale(${sale.toString()})`)
+        yield database_1.default.query(`SELECT create_sale(${sale.toString(req.body.customer_id)})`)
             .then(response => {
             let json_response = JSON.parse(response.rows[0].create_sale);
             sale.id = json_response.id;

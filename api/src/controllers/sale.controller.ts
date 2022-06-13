@@ -12,7 +12,7 @@ export async function createSale(req: Request, res: Response) {
                                     req.body.payment_method, 
                                     req.body.discount
                                 );
-    await conn.query(`SELECT create_sale(${sale.toString()})`)
+    await conn.query(`SELECT create_sale(${sale.toString(req.body.customer_id)})`)
     .then(response => {
 
         let json_response = JSON.parse((response as any).rows[0].create_sale);
