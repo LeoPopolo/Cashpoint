@@ -6,6 +6,7 @@ const router: Router = Router();
 import { closeCashRegister, 
          createCashRegister, 
          getCashRegisters, 
+         getOpenCashRegister, 
          identifyById, 
          isAnyCashRegisterOpen, 
          substractCash 
@@ -19,5 +20,6 @@ router.get('/:id', tokenValidation, identifyById);
 router.patch('/is_any_open', tokenValidation, isAnyCashRegisterOpen);
 router.patch('/close', tokenValidation, closeCashRegister);
 router.patch('/substract', tokenValidation, substractCash);
+router.patch('/get_open', tokenValidation, getOpenCashRegister);
 
 export default router;

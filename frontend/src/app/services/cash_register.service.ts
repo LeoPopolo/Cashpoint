@@ -63,4 +63,11 @@ export class CashRegisterService {
 
     return response;
   }
+
+  async getOpenCashRegister() {
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/cash_register/get_open`, null).toPromise();
+
+    return response;
+  }
 }

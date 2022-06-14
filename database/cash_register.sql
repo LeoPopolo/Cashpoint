@@ -327,3 +327,20 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION cash_register_get_open ()
+RETURNS text AS $$
+DECLARE
+	v_cash_register					cash_register;
+	v_response						jsonb;
+BEGIN
+
+	v_cash_register := get_open_cash_register();
+	
+	v_response := to_json(v_cash_register);
+	
+	RETURN v_response::text;
+END;
+$$ LANGUAGE plpgsql STABLE
+SET search_path FROM CURRENT;

@@ -123,3 +123,20 @@ export async function isAnyCashRegisterOpen(req: Request, res: Response) {
         return res.status(400).send(err);
     });
 }
+
+export async function getOpenCashRegister(req: Request, res: Response) {
+
+    await conn.query(`SELECT cash_register_get_open()`)
+    .then(response => {
+
+        const data = JSON.parse(response.rows[0].cash_register_get_open);
+
+        res.status(200).json({
+            data: data
+        }); 
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(400).send(err);
+    });
+}

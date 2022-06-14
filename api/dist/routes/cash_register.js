@@ -10,5 +10,6 @@ router.get('/:id', verifyToken_1.tokenValidation, cash_register_controller_1.ide
 router.patch('/is_any_open', verifyToken_1.tokenValidation, cash_register_controller_1.isAnyCashRegisterOpen);
 router.patch('/close', verifyToken_1.tokenValidation, cash_register_controller_1.closeCashRegister);
 router.patch('/substract', verifyToken_1.tokenValidation, cash_register_controller_1.substractCash);
+router.patch('/get_open', verifyToken_1.tokenValidation, cash_register_controller_1.getOpenCashRegister);
 exports.default = router;
 //# sourceMappingURL=cash_register.js.map
