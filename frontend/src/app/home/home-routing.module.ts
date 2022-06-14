@@ -6,12 +6,24 @@ import { SaleComponent } from './sale/sale.component';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
 import { UsersComponent } from './users/users.component';
 import { CustomerComponent } from './customer/customer.component';
+import { CashRegisterComponent } from './cash-register/cash-register.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
     children: [
+      {
+        path: 'homepage',
+        component: HomepageComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: '',
+        redirectTo: 'homepage',
+        pathMatch: 'full'
+      },
       {
         path: 'products',
         component: ProductComponent,
@@ -60,6 +72,16 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'customers',
+        pathMatch: 'full'
+      },
+      {
+        path: 'cash_register',
+        component: CashRegisterComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: '',
+        redirectTo: 'cash_register',
         pathMatch: 'full'
       }
     ],

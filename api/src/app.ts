@@ -7,6 +7,7 @@ import authRoutes from './routes/auth';
 import productRoutes from './routes/product';
 import saleRoutes from './routes/sale';
 import customerRoutes from './routes/customer';
+import cashRegisterRoutes from './routes/cash_register';
 
 // settings
 
@@ -31,5 +32,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/product', productRoutes);
 app.use('/api/sale', saleRoutes);
 app.use('/api/customer', customerRoutes);
+app.use('/api/cash_register', cashRegisterRoutes);
 
 export default app;

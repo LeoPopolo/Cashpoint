@@ -1,41 +1,41 @@
 CREATE TYPE sale_item AS (
-    id                      int,
-    name                    text NOT NULL,
-    description             text,
-    price                   real NOT NULL,
-    barcode                 text,
-	brand			        text,
-    quantity                int
+    id                          int,
+    name                        text,
+    description                 text,
+    price                       real,
+    barcode                     text,
+    brand			            text,
+    quantity                    int
 );
 
 CREATE TABLE sale (
-    products                sale_item[],
-    user_owner_id           int,
-    customer                customer,
-    total                   real,
-    payment_method          text,
-    status                  text,
-    discount                real
+    products                    sale_item[],
+    user_owner_id               int,
+    customer                    customer,
+    total                       real,
+    payment_method              text,
+    status                      text,
+    discount                    real
 ) INHERITS (
 	core_object
 );
 
 CREATE OR REPLACE FUNCTION create_sale (
-    p_items				    sale_item[],
-    p_user_owner_id    	    int,
-    p_payment_method     	text,
-    p_discount  			real,
-    p_customer_id           int
+    p_items			            sale_item[],
+    p_user_owner_id    	        int,
+    p_payment_method     	    text,
+    p_discount                  real,
+    p_customer_id               int
 )
 RETURNS text AS $$
 DECLARE
-    v_item 				    sale_item;
-    v_response				record;
-    v_total				    real DEFAULT 0;
-	v_sale_status			text;
-	v_current_stock			int;
-    v_price				    real;
-    v_customer              customer;
+    v_item 		                sale_item;
+    v_response	                record;
+    v_total	                    real DEFAULT 0;
+    v_sale_status		        text;
+    v_current_stock		        int;
+    v_price			            real;
+    v_customer                  customer;
 BEGIN
 
     IF is_any_cash_register_open() THEN
@@ -101,8 +101,8 @@ LANGUAGE plpgsql VOLATILE STRICT;
 
 
 CREATE OR REPLACE FUNCTION get_sales (
-    p_date_from             timestamp without time zone,
-    p_date_to               timestamp without time zone
+    p_date_from                 timestamp without time zone,
+    p_date_to                   timestamp without time zone
 )
 RETURNS sale[] AS $$
 	SELECT array (
@@ -127,12 +127,12 @@ SET search_path FROM CURRENT;
 
 
 CREATE OR REPLACE FUNCTION get_total_sales_pages (
-	p_sales			        sale[]
+	p_sales			            sale[]
 )
 RETURNS int AS $$
 DECLARE
-	v_rest				    int;
-	v_total_pages		    int;
+	v_rest				        int;
+	v_total_pages		        int;
 BEGIN
 	v_rest := array_length(p_sales, 1) % 20;
 	v_total_pages := (array_length(p_sales, 1) / 20);
@@ -148,14 +148,14 @@ SET search_path FROM CURRENT;
 
 
 CREATE OR REPLACE FUNCTION paginate_sales (
-	p_page				    int,
-	p_sales			        sale[]
+	p_page				        int,
+	p_sales			            sale[]
 )
 RETURNS sale[] AS $$
 DECLARE
-	v_rest				    int;
-	v_total_pages		    int;
-	v_sales			        text;
+	v_rest				        int;
+	v_total_pages		        int;
+	v_sales			            text;
 BEGIN
 	v_rest := array_length(p_sales, 1) % 20;
 	v_total_pages := (array_length(p_sales, 1) / 20);
@@ -260,17 +260,17 @@ SET search_path FROM CURRENT;
 
 
 CREATE OR REPLACE FUNCTION search_sales (
-	p_page					int,
-	p_total					real DEFAULT -1,
-	p_payment_method        text DEFAULT '%',
-	p_date_from             timestamp without time zone DEFAULT '2022-01-01'::timestamp,
-	p_date_to               timestamp without time zone DEFAULT current_timestamp
+	p_page					    int,
+	p_total					    real DEFAULT -1,
+	p_payment_method            text DEFAULT '%',
+	p_date_from                 timestamp without time zone DEFAULT '2022-01-01'::timestamp,
+	p_date_to                   timestamp without time zone DEFAULT current_timestamp
 )
 RETURNS text AS $$
 DECLARE
-	v_sales					sale[];
-	v_response				jsonb;
-	v_total_pages			int DEFAULT 0;
+	v_sales					    sale[];
+	v_response				    jsonb;
+	v_total_pages			    int DEFAULT 0;
 BEGIN
 
     IF p_date_from IS NULL THEN
@@ -317,12 +317,12 @@ SET search_path FROM CURRENT;
 
 
 CREATE OR REPLACE FUNCTION sale_identify_by_id (
-    p_id                    int
+    p_id                        int
 )
 RETURNS text AS $$
 DECLARE
-	v_sale					sale;
-	v_response				jsonb;
+	v_sale					    sale;
+	v_response				    jsonb;
 BEGIN
 
 	v_sale := get_sale_by_id(p_id);

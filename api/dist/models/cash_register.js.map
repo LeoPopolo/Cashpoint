@@ -1,0 +1,1 @@
+{"version":3,"file":"cash_register.js","sourceRoot":"","sources":["../../src/models/cash_register.ts"],"names":[],"mappings":";;;AAAA,MAAa,kBAAkB;CAM9B;AAND,gDAMC;AAED,MAAa,iBAAiB;CAG7B;AAHD,8CAGC;AAED,MAAa,qBAAqB;CAIjC;AAJD,sDAIC;AAED,MAAa,YAAY;IAQrB,YAAY,YAAoB;QAC5B,IAAI,CAAC,YAAY,GAAG,YAAY,CAAC;IACrC,CAAC;CACJ;AAXD,oCAWC"}

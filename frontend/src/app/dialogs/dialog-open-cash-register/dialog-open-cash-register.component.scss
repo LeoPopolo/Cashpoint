@@ -1,0 +1,33 @@
+main {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+
+  h3 {
+    text-align: center;
+  }
+
+  input {
+    border-bottom: 1px solid #bbb;
+    padding: .7em 1em;
+    font-size: 1.1em;
+    width: 100%;
+    margin: auto;
+  }
+
+  div {
+    padding: 1em;
+
+    button {
+      display: flex;
+      margin: auto;
+    }
+
+    label {
+      width: 100%;
+      display: inline-flex;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

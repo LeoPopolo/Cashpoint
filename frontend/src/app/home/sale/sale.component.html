@@ -2,7 +2,7 @@
   <h1>Ventas</h1>
 
   <div class="buttons-container">
-    <button class="btn-primary" routerLink="../new-sale"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
+    <button class="btn-primary" (click)="goToNewSale()"> <mat-icon>add</mat-icon> <span>Nueva venta</span> </button>
     <div class="filters" [ngClass]="{'show-filters': filterOpened}">
       <div>
         <input type="number" placeholder="Total: $" [(ngModel)]="jsonFilter.total">

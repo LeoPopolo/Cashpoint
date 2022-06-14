@@ -1,0 +1,14 @@
+<main>
+  <h3>Nuevo egreso de caja</h3>
+  <div>
+    <label>Monto a retirar de caja</label>
+    <input type="number" placeholder="Monto a retirar de caja  $" [(ngModel)]="amount">
+  </div>
+  <div>
+    <label>Descripción</label>
+    <input type="text" placeholder="Ej: Pago a proveedores" [(ngModel)]="description">
+  </div>
+  <div>
+    <button (click)="substractCash()" class="btn-primary">Aceptar</button>
+  </div>
+</main>

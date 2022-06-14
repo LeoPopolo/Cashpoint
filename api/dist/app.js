@@ -10,6 +10,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const product_1 = __importDefault(require("./routes/product"));
 const sale_1 = __importDefault(require("./routes/sale"));
 const customer_1 = __importDefault(require("./routes/customer"));
+const cash_register_1 = __importDefault(require("./routes/cash_register"));
 // settings
 app.set('port', 3000);
 // middlewares
@@ -29,5 +30,6 @@ app.use('/api/auth', auth_1.default);
 app.use('/api/product', product_1.default);
 app.use('/api/sale', sale_1.default);
 app.use('/api/customer', customer_1.default);
+app.use('/api/cash_register', cash_register_1.default);
 exports.default = app;
 //# sourceMappingURL=app.js.map

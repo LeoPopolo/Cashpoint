@@ -1,0 +1,10 @@
+<main>
+  <h3>Nueva caja</h3>
+  <div>
+    <label>Monto inicial en la caja $</label>
+    <input type="number" placeholder="Monto de inicio en caja $" [(ngModel)]="initialCash">
+  </div>
+  <div>
+    <button (click)="openCashRegister()" class="btn-primary">Abrir Caja</button>
+  </div>
+</main>

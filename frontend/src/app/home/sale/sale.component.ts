@@ -5,6 +5,9 @@ import { SaleService } from '../../services/sale.service';
 import { Product } from '../product/product.component';
 import { Customer } from '../customer/customer.component';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+import { CashRegisterService } from 'src/app/services/cash_register.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class SaleResponse {
   id: number = 0;
@@ -43,13 +46,19 @@ export class SaleComponent implements OnInit {
 
   selectedDate: string = 'todas';
 
+  isAnyCashRegisterOpen: boolean = false;
+
   constructor(
     private dialog: MatDialog,
-    private saleServices: SaleService
+    private saleServices: SaleService,
+    private router: Router,
+    private cashRegisterServices: CashRegisterService,
+    private snackbar: MatSnackBar
   ) { }
 
   async ngOnInit() {
     await this.getSales();
+    await this.isAnyOpen();
   }
 
   async getSales() {
@@ -61,6 +70,22 @@ export class SaleComponent implements OnInit {
     .catch(err => {
       console.log(err);
     });
+  }
+
+  async isAnyOpen() {
+    await this.cashRegisterServices.isAnyOpen()
+    .then(resp => {
+      this.isAnyCashRegisterOpen = resp.data;
+    })
+    .catch(err => console.log(err));
+  }
+
+  goToNewSale() {
+    if (this.isAnyCashRegisterOpen) {
+      this.router.navigate(['new-sale']);
+    } else {
+      this.openSnackbar('No hay una caja registradora abierta');
+    }
   }
 
   parseStatus(status: string): string {
@@ -146,4 +171,10 @@ export class SaleComponent implements OnInit {
     this.filterOpened = !this.filterOpened;
   }
 
+  openSnackbar(message: string) {
+    this.snackbar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: 'snack-bar-style'
+    });
+  }
 }

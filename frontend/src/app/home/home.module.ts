@@ -10,6 +10,8 @@ import { MaterialModule } from '../shared/material.module';
 import { NewSaleComponent } from './sale/new-sale/new-sale.component';
 import { UsersComponent } from './users/users.component';
 import { CustomerComponent } from './customer/customer.component';
+import { CashRegisterComponent } from './cash-register/cash-register.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { CustomerComponent } from './customer/customer.component';
     NewSaleComponent,
     UsersComponent,
     CustomerComponent,
+    CashRegisterComponent,
+    HomepageComponent,
   ],
   imports: [
     CommonModule,
