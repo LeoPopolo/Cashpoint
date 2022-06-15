@@ -1,28 +1,63 @@
 <main>
   <div class="container-top">
     <div class="element-1">
-      <h2>Total Neto</h2>
-      <h1>${{openCashRegister.total.total_net}}</h1>
+      <div *ngIf="isAnyOpen">
+        <h2>Total Neto</h2>
+        <h1>${{openCashRegister.total.total_net}}</h1>
+      </div>
+      <div *ngIf="!isAnyOpen">
+        <div class="container-btn-open">
+          <h2>No hay caja registradora abierta</h2>
+          <button class="btn-secondary-outlined" (click)="goToCashRegisters()">Ir a cajas</button>
+        </div>
+      </div>
     </div>
     <div class="element-2">
-      <h2>Cantidad de ventas</h2>
-      <h1>3</h1>
+      <div *ngIf="isAnyOpen">
+        <h2>Cantidad de ventas</h2>
+        <h1>{{openCashRegister.data_analytics.sales_quantity}}</h1>
+      </div>
     </div>
     <div class="element-3">
-      <h2>Productos vendidos</h2>
-      <h1>15</h1>
+      <div *ngIf="isAnyOpen">
+        <h2>Productos vendidos</h2>
+        <h1>{{openCashRegister.data_analytics.sold_items_quantity}}</h1>
+      </div>
     </div>
     <div class="element-4">
-      <h2>Dinero egresado de caja</h2>
-      <h1>${{parseOutgoings(openCashRegister.outgoing_cash)}}</h1>
+      <div *ngIf="isAnyOpen">
+        <h2>Dinero egresado de caja</h2>
+        <h1>${{parseOutgoings(openCashRegister.outgoing_cash)}}</h1>
+      </div>
     </div>
   </div>
   <div class="container-bottom">
     <div class="bottom-element-1">
-
+      <h1>Ventas de hoy</h1>
+      <div *ngFor="let item of salesList" (click)="openDialogSeeSale(item.id)">
+        <div>
+          <span>#{{item.id}}</span>
+          <span>${{item.total}}</span>
+        </div>
+        <div>
+          <span>{{item.payment_method}}</span>
+          <span>{{item.creation_timestamp | date:'short'}}</span>
+        </div>
+      </div>
     </div>
     <div class="bottom-element-2">
-
+      <span>
+        <span></span>
+        <h1>Retiros de caja</h1>
+        <span>Total: ${{parseOutgoings(openCashRegister.outgoing_cash)}}</span>
+      </span>
+      <div *ngFor="let item of outgoingsList" class="table-outgoings">
+        <span>${{item.amount}}</span>
+        <div>
+          <span>{{item.description}}</span>
+          <span>{{item.creation_timestamp | date:'short'}}</span>
+        </div>
+      </div>
     </div>
   </div>
 </main>

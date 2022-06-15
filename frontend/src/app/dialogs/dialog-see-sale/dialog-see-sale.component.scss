@@ -9,6 +9,7 @@ h3 {
     justify-content: space-between;
     align-items: center;
     padding-block: .5em;
+    border-bottom: 1px solid #bbb;
   }
 }
 
@@ -23,6 +24,12 @@ h3 {
 
     span {
       text-align: left;
+    }
+  }
+
+  .product-list-header {
+    span {
+      font-weight: bold;
     }
   }
 }

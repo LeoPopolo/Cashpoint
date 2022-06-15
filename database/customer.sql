@@ -12,8 +12,6 @@ ALTER TABLE customer
 ADD CONSTRAINT UQ_customer_identifier 
 UNIQUE (identifier);
 
-INSERT INTO customer (id, name, identifier, phone_number, iva_responsability) VALUES (1, 'CONSUMIDOR FINAL', '--', '--', 'CONSUMIDOR FINAL');
-
 CREATE OR REPLACE FUNCTION get_customer_by_id (
     p_id                        int
 )

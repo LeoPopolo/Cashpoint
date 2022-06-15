@@ -11,5 +11,6 @@ router.patch('/is_any_open', verifyToken_1.tokenValidation, cash_register_contro
 router.patch('/close', verifyToken_1.tokenValidation, cash_register_controller_1.closeCashRegister);
 router.patch('/substract', verifyToken_1.tokenValidation, cash_register_controller_1.substractCash);
 router.patch('/get_open', verifyToken_1.tokenValidation, cash_register_controller_1.getOpenCashRegister);
+router.patch('/is_from_today', verifyToken_1.tokenValidation, cash_register_controller_1.isOpenCashRegisterFromToday);
 exports.default = router;
 //# sourceMappingURL=cash_register.js.map

@@ -36,63 +36,72 @@ DECLARE
     v_current_stock		        int;
     v_price			            real;
     v_customer                  customer;
+    v_sold_items_quantity       int DEFAULT 0;
 BEGIN
 
     IF is_any_cash_register_open() THEN
-        FOREACH v_item IN ARRAY p_items
-        LOOP
-            SELECT stock, price INTO v_current_stock, v_price FROM product WHERE id = v_item.id;
+        IF is_open_cash_register_from_today() THEN
+            FOREACH v_item IN ARRAY p_items
+            LOOP
+                SELECT stock, price INTO v_current_stock, v_price FROM product WHERE id = v_item.id;
+                
+                v_total := v_total + (v_item.quantity * v_item.price);
+                v_sold_items_quantity := v_sold_items_quantity + v_item.quantity;
+                
+                IF v_current_stock >= v_item.quantity THEN
+                    UPDATE product SET stock = v_current_stock - v_item.quantity WHERE id = v_item.id;
+                ELSE
+                    RAISE EXCEPTION 'Not enough stock of product with id = %', v_item.id;
+                END IF;
+            END LOOP;
             
-            v_total := v_total + (v_item.quantity * v_item.price);
-            
-            IF v_current_stock >= v_item.quantity THEN
-                UPDATE product SET stock = v_current_stock - v_item.quantity WHERE id = v_item.id;
-            ELSE
-                RAISE EXCEPTION 'Not enough stock of product with id = %', v_item.id;
+            IF p_discount > 0 THEN
+
+                v_total := v_total - (v_total * p_discount / 100);
             END IF;
-        END LOOP;
-        
-        IF p_discount > 0 THEN
 
-            v_total := v_total - (v_total * p_discount / 100);
+            v_customer := get_customer_by_id(p_customer_id);
+
+            IF p_payment_method = 'efectivo' THEN
+                PERFORM cash_register_add_cash(v_total);
+            ELSIF p_payment_method = 'débito' THEN
+                PERFORM cash_register_add_debit(v_total);
+            ELSIF p_payment_method = 'crédito' THEN
+                PERFORM cash_register_add_credit(v_total);
+            ELSIF p_payment_method = 'transferencia' THEN
+                PERFORM cash_register_add_transfer(v_total);
+            ELSIF p_payment_method = 'mercadopago' THEN
+                PERFORM cash_register_add_mp(v_total);
+            END IF;
+
+            PERFORM cash_register_increment_sales_quantity();
+            PERFORM cash_register_increment_sold_items_quantity(v_sold_items_quantity);
+
+            INSERT INTO sale (
+                products, 
+                user_owner_id, 
+                customer,
+                total, 
+                payment_method, 
+                status, 
+                discount
+            ) VALUES (
+                p_items, 
+                p_user_owner_id, 
+                v_customer,
+                v_total, 
+                p_payment_method, 
+                'closed',
+                p_discount
+            ) RETURNING * INTO v_response;
+            
+            RETURN json_build_object(
+                'id', v_response.id,
+                'total', v_response.total
+            )::text;
+        ELSE
+            RAISE EXCEPTION 'Current cash register is not from today';
         END IF;
-
-        v_customer := get_customer_by_id(p_customer_id);
-
-        IF p_payment_method = 'efectivo' THEN
-            PERFORM cash_register_add_cash(v_total);
-        ELSIF p_payment_method = 'débito' THEN
-            PERFORM cash_register_add_debit(v_total);
-        ELSIF p_payment_method = 'crédito' THEN
-            PERFORM cash_register_add_credit(v_total);
-        ELSIF p_payment_method = 'transferencia' THEN
-            PERFORM cash_register_add_transfer(v_total);
-        ELSIF p_payment_method = 'mercadopago' THEN
-            PERFORM cash_register_add_mp(v_total);
-        END IF;
-
-        INSERT INTO sale (
-            products, 
-            user_owner_id, 
-            customer,
-            total, 
-            payment_method, 
-            status, 
-            discount
-        ) VALUES (
-            p_items, 
-            p_user_owner_id, 
-            v_customer,
-            v_total, 
-            p_payment_method, 
-            'closed',
-            p_discount
-        ) RETURNING * INTO v_response;
-        
-        RETURN json_build_object(
-            'id', v_response.id,
-            'total', v_response.total
-        )::text;
     ELSE
         RAISE EXCEPTION 'There is no cash register open';
     END IF;

@@ -23,6 +23,12 @@ export class CashRegisterMovements {
   amount: number = 0;
   description: string = '';
   user_owner_id: number = 0;
+  creation_timestamp: Date = new Date();
+}
+
+export class CashRegisterAnalytics {
+  sales_quantity: number = 0;
+  sold_items_quantity: number = 0;
 }
 
 export class CashRegister {
@@ -34,6 +40,7 @@ export class CashRegister {
   outgoing_cash: Array<CashRegisterMovements> = [];
   closure_timestamp: Date = new Date();
   initial_cash: number = 0;
+  data_analytics: CashRegisterAnalytics = new CashRegisterAnalytics();
 }
 
 @Component({
@@ -138,6 +145,7 @@ export class CashRegisterComponent implements OnInit {
 
       if (result) {
         await this.closeCashRegister();
+        await this.getCashRegisters();
       }
     });
   }

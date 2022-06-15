@@ -20,7 +20,7 @@ dotenv_1.default.config();
 function createProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const product = new product_1.Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode, req.body.brand);
-        yield database_1.default.query(`INSERT INTO product (name,description,price,stock,barcode,brand,deleted) VALUES (${product.toString()}) RETURNING id`)
+        yield database_1.default.query(`INSERT INTO product (name,description,price,stock,barcode,brand) VALUES (${product.toString()}) RETURNING id`)
             .then((response) => __awaiter(this, void 0, void 0, function* () {
             product.id = response.rows[0].id;
             res.status(200).json({

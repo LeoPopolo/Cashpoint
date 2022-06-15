@@ -47,6 +47,7 @@ export class SaleComponent implements OnInit {
   selectedDate: string = 'todas';
 
   isAnyCashRegisterOpen: boolean = false;
+  isOpenCashRegisterFromToday: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -59,6 +60,7 @@ export class SaleComponent implements OnInit {
   async ngOnInit() {
     await this.getSales();
     await this.isAnyOpen();
+    await this.isFromToday();
   }
 
   async getSales() {
@@ -80,9 +82,21 @@ export class SaleComponent implements OnInit {
     .catch(err => console.log(err));
   }
 
+  async isFromToday() {
+    await this.cashRegisterServices.isFromToday()
+    .then(resp => {
+      this.isOpenCashRegisterFromToday = resp.data;
+    })
+    .catch(err => console.log(err));
+  }
+
   goToNewSale() {
     if (this.isAnyCashRegisterOpen) {
-      this.router.navigate(['new-sale']);
+      if (this.isOpenCashRegisterFromToday) {
+        this.router.navigate(['new-sale']);
+      } else {
+        this.openSnackbar('La caja registradora abierta no es del dia de hoy');
+      }
     } else {
       this.openSnackbar('No hay una caja registradora abierta');
     }

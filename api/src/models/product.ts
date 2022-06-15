@@ -23,7 +23,7 @@ export class Product {
     }
 
     toString(){
-        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}','${this.brand}','${this.deleted}'`;
+        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}','${this.brand}'`;
     }
 
     responseDto() {

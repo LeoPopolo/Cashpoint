@@ -5,7 +5,7 @@ CREATE TABLE product (
     stock           int NOT NULL,
     barcode         text,
 	brand			text,
-    deleted         boolean
+    deleted         boolean DEFAULT FALSE
 ) INHERITS (
 	core_object
 );

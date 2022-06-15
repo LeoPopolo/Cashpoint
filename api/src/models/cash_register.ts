@@ -15,6 +15,12 @@ export class CashRegisterMovements {
     amount: number;
     description: string;
     user_owner_id: number;
+    creation_timestamp: Date;
+}
+
+export class CashRegisterAnalytics {
+    sales_quantity: number;
+    sold_items_quantity: number;
 }
 
 export class CashRegister {
@@ -24,6 +30,7 @@ export class CashRegister {
     outgoing_cash: CashRegisterMovements;
     closure_timestamp: Date;
     initial_cash: number;
+    data_analytics: CashRegisterAnalytics;
 
     constructor(initial_cash: number) {
         this.initial_cash = initial_cash;

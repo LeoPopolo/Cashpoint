@@ -70,4 +70,11 @@ export class CashRegisterService {
 
     return response;
   }
+
+  async isFromToday() {
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/cash_register/is_from_today`, null).toPromise();
+
+    return response;
+  }
 }

@@ -140,3 +140,20 @@ export async function getOpenCashRegister(req: Request, res: Response) {
         return res.status(400).send(err);
     });
 }
+
+export async function isOpenCashRegisterFromToday(req: Request, res: Response) {
+
+    await conn.query(`SELECT is_open_cash_register_from_today()`)
+    .then(response => {
+
+        const data = JSON.parse(response.rows[0].is_open_cash_register_from_today);
+
+        res.status(200).json({
+            data: data
+        }); 
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(400).send(err);
+    });
+}

@@ -41,6 +41,18 @@
   align-items: center;
 }
 
+.btn-secondary-outlined {
+  background-color: transparent;
+  border-radius: 100px;
+  padding: .7em 1em;
+  font-size: 1.1em;
+  color: #fff;
+  border: 1px solid #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
 .snack-bar-style{
   background-color: var(--primary-color);
   color: white;

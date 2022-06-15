@@ -9,6 +9,7 @@ import { closeCashRegister,
          getOpenCashRegister, 
          identifyById, 
          isAnyCashRegisterOpen, 
+         isOpenCashRegisterFromToday, 
          substractCash 
         }  from '../controllers/cash_register.controller';
 
@@ -21,5 +22,6 @@ router.patch('/is_any_open', tokenValidation, isAnyCashRegisterOpen);
 router.patch('/close', tokenValidation, closeCashRegister);
 router.patch('/substract', tokenValidation, substractCash);
 router.patch('/get_open', tokenValidation, getOpenCashRegister);
+router.patch('/is_from_today', tokenValidation, isOpenCashRegisterFromToday);
 
 export default router;

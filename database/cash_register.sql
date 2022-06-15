@@ -14,7 +14,14 @@ CREATE TYPE cash_register_total AS (
 CREATE TYPE cash_register_movements AS (
     amount								real,
 	description							text,
-	user_owner_id						int
+	user_owner_id						int,
+	creation_timestamp					timestamp
+);
+
+
+CREATE TYPE cash_register_analytics AS (
+	sales_quantity						int,
+	sold_items_quantity					int
 );
 
 CREATE TABLE cash_register (
@@ -23,7 +30,8 @@ CREATE TABLE cash_register (
 	total								cash_register_total DEFAULT (0,0),
 	outgoing_cash						cash_register_movements[] DEFAULT '{}',
 	closure_timestamp					timestamp DEFAULT null,
-	initial_cash						real
+	initial_cash						real,
+	data_analytics						cash_register_analytics DEFAULT (0,0)
 ) INHERITS (
 	core_object
 );
@@ -48,6 +56,23 @@ RETURNS boolean AS $$
     SELECT exists(SELECT * FROM cash_register WHERE NOT closed);
 $$
 LANGUAGE sql;
+
+
+CREATE OR REPLACE FUNCTION is_open_cash_register_from_today ()
+RETURNS boolean AS $$
+BEGIN
+	IF is_any_cash_register_open() THEN
+    	IF creation_timestamp(get_open_cash_register())::date < current_date THEN
+			RETURN FALSE;
+		ELSE
+			RETURN TRUE;
+		END IF; 
+	END IF;
+
+	RETURN FALSE;
+END;
+$$
+LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION get_open_cash_register_id ()
@@ -171,7 +196,7 @@ RETURNS cash_register AS $$
 BEGIN
     UPDATE cash_register 
 	SET total.total_net = total_net(total(get_open_cash_register())) - p_amount,
-		outgoing_cash = array_append(outgoing_cash(get_open_cash_register()), (p_amount, p_description, p_user_owner_id)::cash_register_movements)
+		outgoing_cash = array_append(outgoing_cash(get_open_cash_register()), (p_amount, p_description, p_user_owner_id, current_timestamp)::cash_register_movements)
 	WHERE id = get_open_cash_register_id();
 
 	RETURN get_open_cash_register();
@@ -344,3 +369,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION cash_register_increment_sales_quantity ()
+RETURNS void AS $$
+
+	UPDATE cash_register 
+	SET data_analytics.sales_quantity = sales_quantity(data_analytics(get_open_cash_register())) + 1
+	WHERE id = get_open_cash_register_id();
+	
+$$ LANGUAGE sql;
+
+
+CREATE OR REPLACE FUNCTION cash_register_increment_sold_items_quantity (
+	sold_items_quantity				int
+)
+RETURNS void AS $$
+
+	UPDATE cash_register 
+	SET data_analytics.sold_items_quantity = sold_items_quantity(data_analytics(get_open_cash_register())) + sold_items_quantity
+	WHERE id = get_open_cash_register_id();
+	
+$$ LANGUAGE sql;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CashRegister = exports.CashRegisterMovements = exports.CashRegisterTotal = exports.CashRegisterTotals = void 0;
+exports.CashRegister = exports.CashRegisterAnalytics = exports.CashRegisterMovements = exports.CashRegisterTotal = exports.CashRegisterTotals = void 0;
 class CashRegisterTotals {
 }
 exports.CashRegisterTotals = CashRegisterTotals;
@@ -10,6 +10,9 @@ exports.CashRegisterTotal = CashRegisterTotal;
 class CashRegisterMovements {
 }
 exports.CashRegisterMovements = CashRegisterMovements;
+class CashRegisterAnalytics {
+}
+exports.CashRegisterAnalytics = CashRegisterAnalytics;
 class CashRegister {
     constructor(initial_cash) {
         this.initial_cash = initial_cash;

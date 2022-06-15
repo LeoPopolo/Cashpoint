@@ -11,9 +11,21 @@ main {
     grid-template-columns: repeat(4, 1fr);
     gap: 2em;
 
-    div {
+    > div {
       box-shadow: 1px 1px 5px 0 #bbb;
       border-radius: 10px;
+
+      .container-btn-open {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2em;
+
+        button {
+          margin-top: 2em;
+        }
+      }
 
       h2, h1 {
         color: #fff;
@@ -26,20 +38,12 @@ main {
       }
     }
 
-    .element-1 {
-      background: linear-gradient(to right, #222f3f, #435e80);
+    .element-1, .element-2 {
+      background-color: #222f3fee;
     }
 
-    .element-2 {
-      background: linear-gradient(to right, #435e80, #5591ad);
-    }
-
-    .element-3 {
-      background: linear-gradient(to right, #5591ad, #5cbac7);
-    }
-
-    .element-4 {
-      background: linear-gradient(to right, #5cbac7, #65d0df);
+    .element-3, .element-4 {
+      background-color: #4291a8ee;
     }
   }
 
@@ -48,17 +52,87 @@ main {
     grid-template-columns: repeat(2, 1fr);
     gap: 2em;
 
-    div {
-      box-shadow: 1px 1px 5px 0 #bbb;
+    > div {
+      box-shadow: 1px 1px 8px 0 #bbb;
       border-radius: 10px;
     }
 
     .bottom-element-1 {
-      border: 2px solid #222f3f;
+
+      h1 {
+        color: #222f3f;
+        text-align: center;
+        padding-block: .5em;
+      }
+
+      >div {
+        padding: 1em;
+        box-shadow: 1px 6px 6px -4px #bbb;
+        margin-block: .5em;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--primary-color-transparent);
+        }
+
+        div {
+          display: flex;
+          justify-content: space-between;
+
+          &:first-child span {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+          }
+        }
+
+      }
     }
 
     .bottom-element-2 {
-      border: 2px solid #65d0df;
+
+      > span {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+
+        h1 {
+          padding-block: .5em;
+          margin-left: 2em;
+          color: #4291a8;
+        }
+
+        span {
+          font-size: 1em;
+          font-weight: bold;
+        }
+      }
+
+      >div {
+        padding: 1em;
+        box-shadow: 1px 6px 6px -4px #bbb;
+        margin-block: .5em;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .table-outgoings {
+        span {
+          font-weight: bold;
+          font-size: 1.3em;
+        }
+
+        div {
+          margin-top: 5px;
+          display: flex;
+          justify-content: space-between;
+
+          span {
+            font-weight: 700;
+            font-size: .9em;
+          }
+        }
+      }
     }
   }
 }

@@ -8,7 +8,7 @@ export async function createProduct(req: Request, res: Response) {
     
     const product: Product = new Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode, req.body.brand);
     
-    await conn.query(`INSERT INTO product (name,description,price,stock,barcode,brand,deleted) VALUES (${product.toString()}) RETURNING id`)
+    await conn.query(`INSERT INTO product (name,description,price,stock,barcode,brand) VALUES (${product.toString()}) RETURNING id`)
     .then(async response => {
             
         product.id = (response as any).rows[0].id;

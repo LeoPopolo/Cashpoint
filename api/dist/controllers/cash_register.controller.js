@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOpenCashRegister = exports.isAnyCashRegisterOpen = exports.closeCashRegister = exports.substractCash = exports.identifyById = exports.getCashRegisters = exports.createCashRegister = void 0;
+exports.isOpenCashRegisterFromToday = exports.getOpenCashRegister = exports.isAnyCashRegisterOpen = exports.closeCashRegister = exports.substractCash = exports.identifyById = exports.getCashRegisters = exports.createCashRegister = void 0;
 const cash_register_1 = require("../models/cash_register");
 const database_1 = __importDefault(require("../database"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -144,4 +144,20 @@ function getOpenCashRegister(req, res) {
     });
 }
 exports.getOpenCashRegister = getOpenCashRegister;
+function isOpenCashRegisterFromToday(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`SELECT is_open_cash_register_from_today()`)
+            .then(response => {
+            const data = JSON.parse(response.rows[0].is_open_cash_register_from_today);
+            res.status(200).json({
+                data: data
+            });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.isOpenCashRegisterFromToday = isOpenCashRegisterFromToday;
 //# sourceMappingURL=cash_register.controller.js.map
