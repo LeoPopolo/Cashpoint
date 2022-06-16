@@ -21,6 +21,7 @@ import { DialogAddEditCustomerComponent } from './dialogs/dialog-add-edit-custom
 import { DialogOpenCashRegisterComponent } from './dialogs/dialog-open-cash-register/dialog-open-cash-register.component';
 import { DialogSubstractCashComponent } from './dialogs/dialog-substract-cash/dialog-substract-cash.component';
 import { DialogCloseCashRegisterComponent } from './dialogs/dialog-close-cash-register/dialog-close-cash-register.component';
+import { DialogSeeOutgoingsComponent } from './dialogs/dialog-see-outgoings/dialog-see-outgoings.component';
 
 registerLocaleData(localeEsAr, 'es-Ar');
 
@@ -36,7 +37,8 @@ registerLocaleData(localeEsAr, 'es-Ar');
     DialogAddEditCustomerComponent,
     DialogOpenCashRegisterComponent,
     DialogSubstractCashComponent,
-    DialogCloseCashRegisterComponent
+    DialogCloseCashRegisterComponent,
+    DialogSeeOutgoingsComponent
   ],
   imports: [
     CommonModule,

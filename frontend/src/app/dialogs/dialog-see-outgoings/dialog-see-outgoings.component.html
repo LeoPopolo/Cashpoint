@@ -1,0 +1,9 @@
+<main>
+  <h1>Egresos de caja</h1>
+
+  <div *ngFor="let item of outgoingsList">
+    <span>${{item.amount}}</span>
+    <span>{{item.description}}</span>
+    <span>{{item.creation_timestamp | date:'short'}}</span>
+  </div>
+</main>

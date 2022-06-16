@@ -103,6 +103,23 @@ main {
         margin-top: 1em;
         box-shadow: 1px 1px 5px 0 #bbb;
 
+        .outgoings {
+
+          span {
+            display: flex;
+            width: 100%;
+          }
+
+          mat-icon {
+            margin-top: .5em;
+          }
+        }
+
+        span mat-icon {
+          cursor: pointer;
+          margin-left: .4em;
+        }
+
         .table-body-element-list {
           display: inline-flex;
           flex-direction: column;
@@ -111,11 +128,6 @@ main {
 
         .actions-element {
           color: var(--primary-color);
-
-          mat-icon {
-            cursor: pointer;
-            margin-left: .4em;
-          }
         }
       }
 

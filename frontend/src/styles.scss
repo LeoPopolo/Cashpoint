@@ -16,41 +16,32 @@
   --secondary-color: #80fdde;
 }
 
-.btn-primary {
-  background-color: var(--primary-color);
-  border-radius: 100px;
-  padding: .7em 1em;
-  font-size: 1.1em;
-  color: #fff;
-  box-shadow: 1px 1px 5px 0 #bbb;
+.btn-primary, .btn-secondary, .btn-primary-outlined {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  border-radius: 100px;
+  padding: .7em 1em;
+  font-size: 1.1em;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 1px 1px 5px 0 #bbb;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  border-radius: 100px;
-  padding: .7em 1em;
-  font-size: 1.1em;
+  background-color: #fff;
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
   box-shadow: 1px 1px 5px 0 #bbb;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
 }
 
-.btn-secondary-outlined {
-  background-color: transparent;
-  border-radius: 100px;
-  padding: .7em 1em;
-  font-size: 1.1em;
+.btn-primary-outlined {
+  background-color: var(--primary-color);
   color: #fff;
   border: 1px solid #fff;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
 }
 
 .snack-bar-style{

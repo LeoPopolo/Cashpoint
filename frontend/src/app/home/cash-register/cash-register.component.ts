@@ -8,6 +8,7 @@ import { CashRegisterService } from '../../services/cash_register.service';
 var jsPDF = require('jspdf');
 var autoTable = require('jspdf-autotable');
 import * as fs from 'file-saver';
+import { DialogSeeOutgoingsComponent } from 'src/app/dialogs/dialog-see-outgoings/dialog-see-outgoings.component';
 
 export class CashRegisterTotals {
   total_cash: number = 0;
@@ -150,6 +151,17 @@ export class CashRegisterComponent implements OnInit {
         });
       }
     });
+  }
+
+  openDialogSeeOutgoings(outgoings: Array<CashRegisterMovements>) {
+    const dialogOptions = {
+      width: '350px',
+      data: {
+        outgoings: outgoings
+      }
+    }
+
+    this.dialog.open(DialogSeeOutgoingsComponent, dialogOptions);
   }
 
   async openDialogCloseCashRegister() {

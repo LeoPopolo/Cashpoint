@@ -1,0 +1,16 @@
+main {
+  h1 {
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+  div {
+    border-block: 1px solid #bbb;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-block: 1em;
+    padding-block: 1em;
+    font-size: 1.2em;
+  }
+}

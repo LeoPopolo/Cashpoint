@@ -29,6 +29,14 @@
       font-size: 1.2em;
       margin-left: .5em;
     }
+
+    mat-icon {
+      transition: all 200ms;
+    }
+
+    &:hover mat-icon {
+      margin-left: .5em;
+    }
   }
 
   .logout {

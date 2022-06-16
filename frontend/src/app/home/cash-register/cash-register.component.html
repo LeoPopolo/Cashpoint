@@ -40,7 +40,7 @@
         <span>{{item.creation_timestamp | date:'short'}}</span>
         <span>{{item.closure_timestamp | date:'short'}}</span>
         <span>${{item.initial_cash}}</span>
-        <span>${{parseOutgoings(item.outgoing_cash)}}</span>
+        <span class="outgoings"> <span>${{parseOutgoings(item.outgoing_cash)}}</span> <mat-icon (click)="openDialogSeeOutgoings(item.outgoing_cash)">visibility</mat-icon> </span>
         <span class="table-body-element-list">
           <label>Efectivo: ${{item.partial_totals.total_cash}}</label>
           <label>Débito: ${{item.partial_totals.total_debit}}</label>
