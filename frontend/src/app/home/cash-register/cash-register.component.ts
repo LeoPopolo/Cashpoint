@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DialogConfirmComponent } from '../../dialogs/dialog-confirm/dialog-confirm.component';
+import { DialogCloseCashRegisterComponent } from 'src/app/dialogs/dialog-close-cash-register/dialog-close-cash-register.component';
 import { DialogOpenCashRegisterComponent } from '../../dialogs/dialog-open-cash-register/dialog-open-cash-register.component';
 import { DialogSubstractCashComponent } from '../../dialogs/dialog-substract-cash/dialog-substract-cash.component';
 import { CashRegisterService } from '../../services/cash_register.service';
+var jsPDF = require('jspdf');
+var autoTable = require('jspdf-autotable');
+import * as fs from 'file-saver';
 
 export class CashRegisterTotals {
   total_cash: number = 0;
@@ -51,6 +54,7 @@ export class CashRegister {
 export class CashRegisterComponent implements OnInit {
 
   cashRegistersList: Array<CashRegister> = [];
+  cashRegister: CashRegister = new CashRegister();
 
   filter: any = {
     page: 1,
@@ -73,12 +77,29 @@ export class CashRegisterComponent implements OnInit {
   async ngOnInit() {
     await this.getCashRegisters();
     await this.isAnyOpen();
+    await this.getOpenCashRegister();
+  }
+
+  async identifyById(id: number) {
+    await this.cashRegisterServices.identifyById(id)
+    .then(resp => {
+      this.cashRegister = resp.data;
+    })
+    .catch(err => console.log(err));
   }
 
   async isAnyOpen() {
     await this.cashRegisterServices.isAnyOpen()
     .then(resp => {
       this.isAnyCashRegisterOpen = resp.data;
+    })
+    .catch(err => console.log(err));
+  }
+
+  async getOpenCashRegister() {
+    await this.cashRegisterServices.getOpenCashRegister()
+    .then(resp => {
+      this.cashRegister = resp.data;
     })
     .catch(err => console.log(err));
   }
@@ -133,19 +154,25 @@ export class CashRegisterComponent implements OnInit {
 
   async openDialogCloseCashRegister() {
     const dialogOptions = {
-      width: '350px',
+      width: '500px',
       data: {
-        message: `¿Desea cerrar la caja de hoy?`
-      }
+        cashRegister: this.cashRegister
+      },
+      disableClose: true
     }
 
-    const dialogRef = this.dialog.open(DialogConfirmComponent, dialogOptions);
+    const dialogRef = this.dialog.open(DialogCloseCashRegisterComponent, dialogOptions);
 
     dialogRef.afterClosed().subscribe( async result => {
 
-      if (result) {
+      if (result.close) {
         await this.closeCashRegister();
         await this.getCashRegisters();
+        await this.identifyById(this.cashRegister.id);
+
+        if (result.downloadPDF) {
+          this.downloadReportPDF();
+        }
       }
     });
   }
@@ -187,6 +214,89 @@ export class CashRegisterComponent implements OnInit {
       console.log(err);
       this.openSnackbar('Se produjo un error al intentar abrir la caja. Reintente más tarde');
     });
+  }
+
+  downloadReportPDF() {
+    let namePdf = `Cierre de caja ${ new Date (this.cashRegister.closure_timestamp).toLocaleString('sv-SE')}`;
+    const doc = new jsPDF.jsPDF();
+    const col = ["Monto", "Descripción", "Fecha y hora"];
+    const rows: any = [];
+
+    doc.setFontSize(16);
+    doc.text(`Cierre de caja: ${new Date (this.cashRegister.closure_timestamp).toLocaleString('sv-SE')}`, 13, 10);
+    doc.setFontSize(10);
+    doc.text("Fecha y hora de apertura: " + new Date(this.cashRegister.creation_timestamp).toLocaleString('sv-SE'), 13, 25);
+    doc.text("Efectivo Inicial en caja: $" + this.cashRegister.initial_cash, 13, 30);
+    doc.text("Ventas realizadas: " + this.cashRegister.data_analytics.sales_quantity, 13, 35);
+    doc.text("Productos vendidos: " + this.cashRegister.data_analytics.sold_items_quantity, 13, 40);
+    doc.setFontSize(14);
+    doc.text("Ingresos parciales:", 13, 50);
+    doc.setFontSize(10);
+    doc.text("Efectivo: $" + this.cashRegister.partial_totals.total_cash, 13, 55);
+    doc.text("Débito: $" + this.cashRegister.partial_totals.total_debit, 13, 60);
+    doc.text("Crédito: $" + this.cashRegister.partial_totals.total_credit, 13, 65);
+    doc.text("Mercadopago: $" + this.cashRegister.partial_totals.total_mp, 13, 70);
+    doc.text("Transferencia: $" + this.cashRegister.partial_totals.total_transfer, 13, 75);
+    doc.setFontSize(14);
+    doc.text("Egresos de caja en efectivo:", 13, 85);
+    doc.setFontSize(10);
+    doc.text("Total en egresos: $" + this.parseOutgoings(this.cashRegister.outgoing_cash), 13, 90);
+    doc.setFontSize(14);
+    doc.text("Efectivo en caja", 13, 100);
+    doc.setFontSize(10);
+    doc.text("Total esperado en caja: $" + ((this.cashRegister.partial_totals.total_cash + this.cashRegister.initial_cash) - this.parseOutgoings(this.cashRegister.outgoing_cash)), 13, 105);
+    doc.setFontSize(16);
+    doc.text("Total facturado:", 13, 115);
+    doc.setFontSize(12);
+    doc.text("Total bruto: $" + this.cashRegister.total.total_gross, 13, 120);
+    doc.setFontSize(14);
+    doc.text("Total neto: $" + this.cashRegister.total.total_net, 13, 125);
+
+    if (this.cashRegister.outgoing_cash.length > 0) {
+      doc.setFontSize(14);
+      doc.text("Detalle de egresos", 13, 135);
+
+      const pageContent = function () {
+        doc.setFontSize(16);
+        doc.setTextColor(40);
+      };
+      const itemNew = this.cashRegister.outgoing_cash;
+
+      itemNew.forEach(element => {
+
+        const temp = [
+          '$' + element.amount,
+          element.description,
+          new Date(element.creation_timestamp).toLocaleString('sv-SE')
+        ];
+        rows.push(temp);
+      });
+      doc.setFontSize(12);
+
+      (doc as typeof autoTable & { autoTable: typeof autoTable }).autoTable({
+        didDrawPage: pageContent,
+        margin: { top: 140 },
+        head: [col],
+        body: rows,
+        showHead: 'firstPage',
+        headStyles: {
+          halign: 'center',
+          fillColor: [34, 47, 63]
+        },
+        columnStyles: {
+          0: { cellWidth: 45, halign: 'left' },
+          1: { cellWidth: 92, halign: 'left' },
+          2: { cellWidth: 45, halign: 'left' }
+        },
+        styles: { overflow: 'hidden' },
+        theme: 'grid',
+      });
+    }
+
+    let finalY: number = (doc as any).lastAutoTable.finalY;
+
+    finalY = finalY + 10;
+    doc.save(`${namePdf}`);
   }
 
   parseOutgoings(items: Array<CashRegisterMovements>): number {

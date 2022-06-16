@@ -1,0 +1,61 @@
+main {
+  padding: 1em;
+
+  h1 {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  >div {
+    margin-block: 1em;
+  }
+
+  .closing-data {
+    >span {
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-weight: bold;
+      }
+    }
+
+    h4 {
+      margin-top: 5px;
+      font-size: 1.1em;
+    }
+
+    .total-data-title {
+      font-size: 1.4em;
+      border-top: 1px solid #bbb;
+      padding-top: .5em;
+    }
+
+    .total-data-container, .total-data-container-2 {
+
+      >span {
+        font-size: 1.2em;
+      }
+
+      label {
+        font-size: 1.2em;
+      }
+    }
+
+    .total-data-container-2 {
+      border-bottom: 1px solid #bbb;
+      padding-bottom: .5em;
+
+      label,span {
+        font-size: 1.4em;
+      }
+    }
+  }
+
+  .buttons-container {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-around;
+  }
+}

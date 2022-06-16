@@ -1,0 +1,74 @@
+<main>
+
+  <h1>Cierre de caja</h1>
+  <div class="closing-data">
+    <span>
+      <label>Apertura</label>
+      <span>{{cashRegister.creation_timestamp | date:'short'}}</span>
+    </span>
+    <span>
+      <label>Efectivo inicial</label>
+      <span>${{cashRegister.initial_cash}}</span>
+    </span>
+    <h4>Datos de ventas</h4>
+    <span>
+      <label>Ventas realizadas</label>
+      <span>{{cashRegister.data_analytics.sales_quantity}}</span>
+    </span>
+    <span>
+      <label>Productos vendidos</label>
+      <span>{{cashRegister.data_analytics.sold_items_quantity}}</span>
+    </span>
+    <h4>Ingresos parciales</h4>
+    <span>
+      <label>Efectivo</label>
+      <span>${{cashRegister.partial_totals.total_cash}}</span>
+    </span>
+    <span>
+      <label>Débito</label>
+      <span>${{cashRegister.partial_totals.total_debit}}</span>
+    </span>
+    <span>
+      <label>Crédito</label>
+      <span>${{cashRegister.partial_totals.total_credit}}</span>
+    </span>
+    <span>
+      <label>Mercadopago</label>
+      <span>${{cashRegister.partial_totals.total_mp}}</span>
+    </span>
+    <span>
+      <label>Transferencia</label>
+      <span>${{cashRegister.partial_totals.total_transfer}}</span>
+    </span>
+    <h4>Egresos</h4>
+    <span>
+      <label>Total efectivo egresado</label>
+      <span>${{parseOutgoings(cashRegister.outgoing_cash)}}</span>
+    </span>
+    <h4>Efectivo en caja</h4>
+    <span>
+      <label>Total esperado en caja</label>
+      <span>${{(cashRegister.partial_totals.total_cash + cashRegister.initial_cash) - parseOutgoings(cashRegister.outgoing_cash)}}</span>
+    </span>
+    <h4 class="total-data-title">Total facturado</h4>
+    <span class="total-data-container">
+      <label>Total bruto</label>
+      <span>${{cashRegister.total.total_gross}}</span>
+    </span>
+    <span class="total-data-container-2">
+      <label>Total neto</label>
+      <span>${{cashRegister.total.total_net}}</span>
+    </span>
+  </div>
+
+  <div class="check-container">
+    <div>
+      <mat-checkbox [color]="checkboxColor" [(ngModel)]="responseData.downloadPDF">Imprimir reporte en PDF</mat-checkbox>
+    </div>
+  </div>
+
+  <div class="buttons-container">
+    <button class="btn-primary" (click)="closeCashRegister(true)">Cerrar caja</button>
+    <button class="btn-secondary" (click)="closeCashRegister(false)">Cancelar</button>
+  </div>
+</main>
