@@ -6,7 +6,7 @@ import { DialogCloseSaleComponent } from 'src/app/dialogs/dialog-close-sale/dial
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm/dialog-confirm.component';
 import { ProductService } from 'src/app/services/product.service';
 import { SaleService } from 'src/app/services/sale.service';
-import { Product } from '../../product/product.component';
+import { ProductRequest, ProductResponse } from '../../product/product.component';
 
 @Component({
   selector: 'app-new-sale',
@@ -20,20 +20,20 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
   productFilterAll: string = '';
   productFilterBarcode: string = '';
 
-  productList: Array<Product> = [];
+  productList: Array<ProductResponse> = [];
 
-  filteredProductList: Array<Product> = []
+  filteredProductList: Array<ProductResponse> = [];
 
   filterData = {
     page: 0,
     name: null,
     brand: null,
     barcode: null
-  }
+  };
 
   showFilteredProductList: boolean = false;
 
-  saleProducts: Array<Product> = [];
+  saleProducts: Array<ProductResponse> = [];
 
   subtotal: number = 0;
   total: number = 0;
@@ -67,7 +67,7 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
 
     this.filteredProductList = this.productList.filter(item => {
       return item.name.toLowerCase().includes(this.productFilterAll.toLowerCase())
-          || item.brand.toLowerCase().includes(this.productFilterAll.toLowerCase())
+          || item.brand.name.toLowerCase().includes(this.productFilterAll.toLowerCase())
           || item.barcode.toLowerCase().includes(this.productFilterAll.toLowerCase())
           || item.description.toLowerCase().includes(this.productFilterAll.toLowerCase());
     });
@@ -184,7 +184,7 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
     });
   }
 
-  addToSale(item: Product) {
+  addToSale(item: ProductResponse) {
     this.showFilteredProductList = false;
     this.productFilterAll = '';
 

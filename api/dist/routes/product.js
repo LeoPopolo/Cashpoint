@@ -5,10 +5,12 @@ const verifyToken_1 = require("../libs/verifyToken");
 const router = (0, express_1.Router)();
 const product_controller_1 = require("../controllers/product.controller");
 router.post('/', verifyToken_1.tokenValidation, product_controller_1.createProduct);
+router.post('/brand', verifyToken_1.tokenValidation, product_controller_1.addBrand);
 router.get('/', verifyToken_1.tokenValidation, product_controller_1.getProducts);
 router.get('/:id', verifyToken_1.tokenValidation, product_controller_1.identifyById);
 router.get('/barcode/:barcode', verifyToken_1.tokenValidation, product_controller_1.identifyByBarcode);
 router.get('/reactivate/:id', verifyToken_1.tokenValidation, product_controller_1.reactivateProduct);
+router.get('/brands/all', verifyToken_1.tokenValidation, product_controller_1.getBrands);
 router.delete('/:id', verifyToken_1.tokenValidation, product_controller_1.deleteProduct);
 router.patch('/name/:id', verifyToken_1.tokenValidation, product_controller_1.setName);
 router.patch('/description/:id', verifyToken_1.tokenValidation, product_controller_1.setDescription);
@@ -16,5 +18,6 @@ router.patch('/stock/:id', verifyToken_1.tokenValidation, product_controller_1.s
 router.patch('/price/:id', verifyToken_1.tokenValidation, product_controller_1.setPrice);
 router.patch('/brand/:id', verifyToken_1.tokenValidation, product_controller_1.setBrand);
 router.patch('/barcode/:id', verifyToken_1.tokenValidation, product_controller_1.setBarcode);
+router.patch('/price_by_brand/:id', verifyToken_1.tokenValidation, product_controller_1.setPriceByBrand);
 exports.default = router;
 //# sourceMappingURL=product.js.map

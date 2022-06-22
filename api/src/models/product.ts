@@ -8,13 +8,12 @@ export class Product {
     brand: string;
     deleted: boolean;
 
-    constructor(name: string, description: string, price: number, stock: number, barcode: string, brand: string, id?: number) { 
+    constructor(name: string, description: string, price: number, stock: number, barcode: string, id?: number) { 
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.barcode = barcode;
-        this.brand = brand;
         this.deleted = false;
 
         if (id) {
@@ -22,8 +21,8 @@ export class Product {
         }
     }
 
-    toString(){
-        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}','${this.brand}'`;
+    toString(brand_id: number){
+        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}',${brand_id}`;
     }
 
     responseDto() {

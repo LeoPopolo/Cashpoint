@@ -2,20 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 class Product {
-    constructor(name, description, price, stock, barcode, brand, id) {
+    constructor(name, description, price, stock, barcode, id) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
         this.barcode = barcode;
-        this.brand = brand;
         this.deleted = false;
         if (id) {
             this.id = id;
         }
     }
-    toString() {
-        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}','${this.brand}'`;
+    toString(brand_id) {
+        return `'${this.name}','${this.description}','${this.price}','${this.stock}','${this.barcode}',${brand_id}`;
     }
     responseDto() {
         const product = {

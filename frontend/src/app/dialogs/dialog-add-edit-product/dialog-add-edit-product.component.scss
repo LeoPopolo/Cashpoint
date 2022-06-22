@@ -21,4 +21,39 @@ form {
       margin-top: 1em;
     }
   }
+
+  .container-filter-all {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    >div {
+      width: 100%;
+      display: block;
+      position: absolute;
+      top: 2em;
+      left: 1em;
+      box-shadow: 1px 1px 5px 0 #bbb;
+      max-height: 15vh;
+      overflow-y: scroll;
+      background-color: #fff;
+
+      span {
+        width: 100%;
+        display: block;
+        float: left;
+        padding-block: .5em;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--primary-color-transparent);
+        }
+      }
+
+      .add-brand {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+    }
+  }
 }

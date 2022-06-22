@@ -21,8 +21,6 @@ export class DialogSeeSaleComponent implements OnInit {
 
   async ngOnInit() {
     await this.identifyById();
-
-    console.log(this.sale);
   }
 
   async identifyById() {

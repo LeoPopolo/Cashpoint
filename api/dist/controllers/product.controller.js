@@ -12,22 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setBrand = exports.setBarcode = exports.setPrice = exports.setStock = exports.setDescription = exports.setName = exports.reactivateProduct = exports.deleteProduct = exports.identifyByBarcode = exports.identifyById = exports.getProducts = exports.createProduct = void 0;
+exports.getBrands = exports.addBrand = exports.setPriceByBrand = exports.setBrand = exports.setBarcode = exports.setPrice = exports.setStock = exports.setDescription = exports.setName = exports.reactivateProduct = exports.deleteProduct = exports.identifyByBarcode = exports.identifyById = exports.getProducts = exports.createProduct = void 0;
 const product_1 = require("../models/product");
 const database_1 = __importDefault(require("../database"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 function createProduct(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const product = new product_1.Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode, req.body.brand);
-        yield database_1.default.query(`INSERT INTO product (name,description,price,stock,barcode,brand) VALUES (${product.toString()}) RETURNING id`)
-            .then((response) => __awaiter(this, void 0, void 0, function* () {
-            product.id = response.rows[0].id;
+        const product = new product_1.Product(req.body.name, req.body.description, req.body.price, req.body.stock, req.body.barcode);
+        yield database_1.default.query(`SELECT create_product(${product.toString(req.body.brand_id)})`)
+            .then(response => {
+            const data = JSON.parse(response.rows[0].create_product);
             res.status(200).json({
                 status: 'OK',
-                data: product
+                data: data
             });
-        }))
+        })
             .catch(err => {
             console.log(err);
             return res.status(400).send(err);
@@ -67,22 +67,12 @@ function getProducts(req, res) {
 exports.getProducts = getProducts;
 function identifyById(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield database_1.default.query(`SELECT id, name, description, price, stock, barcode, brand
-                        FROM product
-                        WHERE deleted = FALSE AND id = ${req.params.id}`)
+        yield database_1.default.query(`SELECT product_identify_by_id(${req.params.id})`)
             .then(resp => {
-            if (resp.rows.length === 0) {
-                return res.status(404).json({
-                    error: 'No data found'
-                });
-            }
-            else {
-                const product = resp.rows[0];
-                res.status(200).json({
-                    status: 'OK',
-                    data: product
-                });
-            }
+            const product = JSON.parse(resp.rows[0].product_identify_by_id);
+            res.status(200).json({
+                data: product
+            });
         })
             .catch(err => {
             return res.status(400).send(err);
@@ -240,9 +230,7 @@ function setBarcode(req, res) {
 exports.setBarcode = setBarcode;
 function setBrand(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield database_1.default.query(`UPDATE product
-                        SET brand = '${req.body.brand}'
-                        WHERE id = ${req.params.id}`)
+        yield database_1.default.query(`SELECT product_set_brand(${req.params.id}, ${req.body.brand_id})`)
             .then(() => {
             res.status(200).json({
                 status: 'OK',
@@ -256,4 +244,55 @@ function setBrand(req, res) {
     });
 }
 exports.setBrand = setBrand;
+function setPriceByBrand(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`SELECT set_price_by_brand(${req.params.id}, ${req.body.percentage})`)
+            .then(() => {
+            res.status(200).json({
+                status: 'OK',
+                message: 'Operation completed'
+            });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.setPriceByBrand = setPriceByBrand;
+function addBrand(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`INSERT INTO brand (name, provider_id)
+                                VALUES ('${req.body.name}', ${req.body.provider_id}) RETURNING *`)
+            .then(response => {
+            const data = response.rows[0];
+            res.status(200).json({
+                status: 'OK',
+                message: 'Operation completed',
+                data: data
+            });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.addBrand = addBrand;
+function getBrands(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield database_1.default.query(`SELECT search_brands()`)
+            .then(response => {
+            const data = JSON.parse(response.rows[0].search_brands);
+            res.status(200).json({
+                data: data
+            });
+        })
+            .catch(err => {
+            console.log(err);
+            return res.status(400).send(err);
+        });
+    });
+}
+exports.getBrands = getBrands;
 //# sourceMappingURL=product.controller.js.map

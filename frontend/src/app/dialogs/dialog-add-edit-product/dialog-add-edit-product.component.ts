@@ -1,8 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Product } from '../../home/product/product.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProductResponse, ProductRequest, Brand } from '../../home/product/product.component';
 import { ProductService } from '../../services/product.service';
+import { DialogAddBrandComponent } from '../dialog-add-brand/dialog-add-brand.component';
 
 @Component({
   selector: 'app-dialog-add-edit-product',
@@ -14,13 +16,21 @@ export class DialogAddEditProductComponent implements OnInit {
   addProductForm: FormGroup = this.createForm();
   editBool: boolean = false;
 
-  oldProduct: Product = new Product();
+  oldProduct: ProductResponse = new ProductResponse();
+  brandList: Array<Brand> = [];
+
+  showFilteredBrandList: boolean = false;
+  filteredBrandList: Array<Brand> = [];
+  brandFilter: string = '';
+  selectedBrand: Brand = new Brand();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<DialogAddEditProductComponent>,
     private productServices: ProductService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar
   ) { }
 
   async ngOnInit() {
@@ -29,6 +39,16 @@ export class DialogAddEditProductComponent implements OnInit {
 
       this.loadOldProduct(this.data.id);
     }
+
+    await this.getBrands();
+  }
+
+  async getBrands() {
+    await this.productServices.getBrands()
+    .then(response => {
+      this.brandList = response.data.brands;
+    })
+    .catch(err => console.log(err));
   }
 
   async loadOldProduct(id: number) {
@@ -39,10 +59,11 @@ export class DialogAddEditProductComponent implements OnInit {
           description: this.oldProduct.description,
           stock: this.oldProduct.stock,
           price: this.oldProduct.price,
-          brand: this.oldProduct.brand,
           barcode: this.oldProduct.barcode
         }
       );
+
+      this.brandFilter = this.oldProduct.brand.name;
     });
   }
 
@@ -62,8 +83,8 @@ export class DialogAddEditProductComponent implements OnInit {
       if (this.addProductForm.value.stock !== this.oldProduct.stock)
         await this.setStock(this.addProductForm.value.stock).then(() => changes = true);
 
-      if (this.addProductForm.value.brand !== this.oldProduct.brand)
-        await this.setBrand(this.addProductForm.value.brand).then(() => changes = true);
+      if (this.selectedBrand.id !== this.oldProduct.brand.id)
+        await this.setBrand(this.selectedBrand.id!).then(() => changes = true);
 
       if (this.addProductForm.value.barcode !== this.oldProduct.barcode)
         await this.setBarcode(this.addProductForm.value.barcode).then(() => changes = true);
@@ -92,8 +113,8 @@ export class DialogAddEditProductComponent implements OnInit {
     await this.productServices.setStock(this.data.id, stock).catch(err => console.log(err));
   }
 
-  async setBrand(brand: string) {
-    await this.productServices.setBrand(this.data.id, brand).catch(err => console.log(err));
+  async setBrand(brand_id: number) {
+    await this.productServices.setBrand(this.data.id, brand_id).catch(err => console.log(err));
   }
 
   async setBarcode(barcode: string) {
@@ -106,7 +127,6 @@ export class DialogAddEditProductComponent implements OnInit {
       description: [''],
       stock: ['', Validators.required],
       price: ['', Validators.required],
-      brand: ['', Validators.required],
       barcode: ['', Validators.required],
     });
 
@@ -115,13 +135,13 @@ export class DialogAddEditProductComponent implements OnInit {
 
   async validateForm() {
 
-    if (this.addProductForm.valid) {
-      const productData: Product = {
+    if (this.addProductForm.valid && this.selectedBrand) {
+      const productData: ProductRequest = {
         name: this.addProductForm.value.name,
         description: this.addProductForm.value.description,
         price: this.addProductForm.value.price,
         stock: this.addProductForm.value.stock,
-        brand: this.addProductForm.value.brand,
+        brand_id: this.selectedBrand.id!,
         barcode: this.addProductForm.value.barcode,
       }
 
@@ -129,7 +149,7 @@ export class DialogAddEditProductComponent implements OnInit {
     }
   }
 
-  async createProduct(data: Product) {
+  async createProduct(data: ProductRequest) {
     await this.productServices.createProduct(data).then(()=>{
       this.dialogRef.close(true);
     })
@@ -145,6 +165,48 @@ export class DialogAddEditProductComponent implements OnInit {
     })
     .catch(err => {
       console.log(err);
+    });
+  }
+
+  closeFilteredProducts() {
+    this.showFilteredBrandList = false;
+  }
+
+  selectBrand(item: Brand) {
+    this.selectedBrand = item;
+    this.brandFilter = item.name;
+    this.closeFilteredProducts();
+  }
+
+  filterAllData() {
+    this.showFilteredBrandList = true;
+
+    this.filteredBrandList = this.brandList.filter(item => {
+      return item.name.toLowerCase().includes(this.brandFilter.toLowerCase());
+    });
+  }
+
+  addBrand() {
+    const dialogOptions = {
+      width: '350px',
+    }
+
+    const dialogRef = this.dialog.open(DialogAddBrandComponent, dialogOptions);
+
+    dialogRef.afterClosed().subscribe( result => {
+
+      if (result) {
+        this.selectBrand(result);
+      } else {
+        this.openSnackbar('Se produjo un error al intentar agregar la marca');
+      }
+    });
+  }
+
+  openSnackbar(message: string) {
+    this.snackbar.open(message, 'OK', {
+      duration: 3000,
+      panelClass: 'snack-bar-style'
     });
   }
 }

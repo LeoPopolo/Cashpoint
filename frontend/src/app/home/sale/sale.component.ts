@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSeeSaleComponent } from 'src/app/dialogs/dialog-see-sale/dialog-see-sale.component';
 import { SaleService } from '../../services/sale.service';
-import { Product } from '../product/product.component';
+import { ProductResponse } from '../product/product.component';
 import { Customer } from '../customer/customer.component';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ export class SaleResponse {
   status: string = '';
   customer: Customer = new Customer();
   payment_method: string = '';
-  products: Array<Product> = [];
+  products: Array<ProductResponse> = [];
   creation_timestamp: Date = new Date();
   discount: number = 0;
   user_owner_id: number = 0;

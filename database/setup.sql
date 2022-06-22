@@ -1,1 +1,2 @@
+DROP DATABASE cashpoint;
 CREATE DATABASE cashpoint;

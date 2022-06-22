@@ -1,11 +1,19 @@
+CREATE TABLE brand (
+	provider_id			int DEFAULT null,
+	name				text
+) INHERITS (
+	core_object
+);
+
+
 CREATE TABLE product (
-    name            text NOT NULL,
-    description     text,
-    price           real NOT NULL,
-    stock           int NOT NULL,
-    barcode         text,
-	brand			text,
-    deleted         boolean DEFAULT FALSE
+    name            	text NOT NULL,
+    description     	text,
+    price           	real NOT NULL,
+    stock           	int NOT NULL,
+    barcode         	text,
+	brand				brand,
+    deleted         	boolean DEFAULT FALSE
 ) INHERITS (
 	core_object
 );
@@ -19,6 +27,32 @@ UNIQUE (name);
 ALTER TABLE product
 ADD CONSTRAINT UQ_product_barcode 
 UNIQUE (barcode);
+
+
+CREATE OR REPLACE FUNCTION create_product (
+	p_name				text,
+	p_description		text,
+	p_price				real,
+	p_stock				int,
+	p_barcode 			text,
+	p_brand				int
+) RETURNS text AS $$
+DECLARE
+	v_brand				brand;
+	v_query_response	product;
+	v_json_response		jsonb;
+BEGIN
+	v_brand := brand_identify_by_id(p_brand);
+
+	INSERT INTO product (name, description, price, stock, barcode, brand) 
+				VALUES (p_name, p_description, p_price, p_stock, p_barcode, v_brand)
+				RETURNING * INTO v_query_response;
+
+	v_json_response := to_json(v_query_response);
+
+	RETURN v_json_response::text;
+END;
+$$ LANGUAGE plpgsql VOLATILE STRICT; 
 
 
 CREATE OR REPLACE FUNCTION get_products ()
@@ -215,3 +249,87 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE
 SET search_path FROM CURRENT;
+
+
+CREATE OR REPLACE FUNCTION product_set_brand (
+	p_product_id				int,
+	p_brand_id					int
+) RETURNS void AS $$
+DECLARE
+	v_brand 					brand;
+BEGIN
+	v_brand := brand_identify_by_id(p_brand_id);
+
+	UPDATE product SET brand = v_brand WHERE id = p_product_id;
+END$$ 
+LANGUAGE plpgsql VOLATILE STRICT;
+
+
+CREATE OR REPLACE FUNCTION product_identify_by_id (
+	p_id						int
+) RETURNS text AS $$
+DECLARE
+	v_response					jsonb;
+	v_product					product;
+BEGIN
+	v_product := identify_product_by_id(p_id);
+
+	v_response := to_json(v_product);
+
+	RETURN v_response::text;
+END$$
+LANGUAGE plpgsql IMMUTABLE STRICT;
+
+
+CREATE OR REPLACE FUNCTION identify_product_by_id (
+	p_id						real
+) RETURNS product AS $$
+	
+	SELECT * FROM product WHERE id = p_id;
+
+$$ LANGUAGE sql IMMUTABLE STRICT;
+
+
+CREATE OR REPLACE FUNCTION set_price_by_brand (
+	p_percentage				real,
+	p_brand_id					int
+) RETURNS void AS $$
+	UPDATE product
+		SET price = price + (price * (p_percentage) / 100)
+			WHERE id(brand) = p_brand_id;
+$$ LANGUAGE sql VOLATILE STRICT;
+
+
+CREATE OR REPLACE FUNCTION brand_identify_by_id (
+	p_id			int
+) RETURNS brand AS $$
+	SELECT b FROM brand b WHERE id = p_id;
+$$ LANGUAGE sql IMMUTABLE STRICT;
+
+
+CREATE OR REPLACE FUNCTION get_brands ()
+RETURNS brand[] AS $$
+	SELECT array (
+		SELECT br FROM brand br 
+			ORDER BY name ASC
+	);
+$$
+LANGUAGE sql STABLE STRICT;
+
+
+CREATE OR REPLACE FUNCTION search_brands ()
+RETURNS text AS $$
+DECLARE
+	v_brands				brand[];
+	v_response				jsonb;
+BEGIN
+	
+	v_brands := get_brands();
+	
+	v_response := jsonb_build_object (
+		'brands', array_to_json(v_brands)
+	);
+
+	RETURN v_response::text;
+END;
+$$ LANGUAGE plpgsql STABLE

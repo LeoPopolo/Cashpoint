@@ -13,8 +13,27 @@
   <div class="input-container">
     <input type="number" formControlName="price" placeholder="Precio">
   </div>
-  <div class="input-container">
-    <input type="text" formControlName="brand" placeholder="Marca">
+  <div class="container-filter-all">
+
+    <span>
+      <input type="text" placeholder="Buscar marca"
+                        [(ngModel)]="brandFilter"
+                        [ngModelOptions]="{standalone: true}"
+                        (ngModelChange)="filterAllData()"
+      >
+      <mat-icon *ngIf="showFilteredBrandList" (click)="closeFilteredProducts()">
+        close
+      </mat-icon>
+    </span>
+
+    <div *ngIf="showFilteredBrandList">
+      <span class="add-brand" (click)="addBrand()">
+        Agregar marca
+      </span>
+      <span *ngFor="let item of filteredBrandList" (click)="selectBrand(item)">
+        {{item.name}}
+      </span>
+    </div>
   </div>
   <div class="input-container">
     <input type="text" formControlName="barcode" placeholder="Código de barras">

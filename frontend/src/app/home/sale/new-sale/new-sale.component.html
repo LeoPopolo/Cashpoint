@@ -57,7 +57,7 @@
         <span>${{item.price}}</span>
         <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateTotal()" max="{{item.stock}}">
         <span>{{item.stock}}</span>
-        <span>{{item.brand}}</span>
+        <span>{{item.brand.name}}</span>
         <span>{{item.barcode}}</span>
         <span>${{item.price * item.quantity!}} </span>
         <span (click)="removeFromSale(item.id!)"><mat-icon>delete</mat-icon></span>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Product } from '../home/product/product.component';
+import { Brand, ProductRequest } from '../home/product/product.component';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class ProductService {
     return response.data;
   }
 
-  async createProduct(data: Product) {
+  async createProduct(data: ProductRequest) {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
@@ -96,10 +96,10 @@ export class ProductService {
     return response;
   }
 
-  async setBrand(id: number, brand: string) {
+  async setBrand(id: number, brand_id: number) {
 
     const body = {
-      brand: brand
+      brand_id: brand_id
     }
 
     const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/brand/${id}`, body).toPromise();
@@ -125,6 +125,24 @@ export class ProductService {
     });
 
     const response: any = await this.httpClient.delete<any>(`${this.endpoint}/api/product/${id}`).toPromise();
+
+    return response;
+  }
+
+  async getBrands() {
+
+    const response: any = await this.httpClient.get<any>(`${this.endpoint}/api/product/brands/all`).toPromise();
+
+    return response;
+  }
+
+  async addBrand(brand: Brand) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const response: any = await this.httpClient.post<any>(`${this.endpoint}/api/product/brand`, brand, {headers: headers}).toPromise();
 
     return response;
   }

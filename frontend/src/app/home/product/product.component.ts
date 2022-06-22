@@ -5,15 +5,33 @@ import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm/dialog-co
 import { ProductService } from 'src/app/services/product.service';
 import { DialogAddEditProductComponent } from '../../dialogs/dialog-add-edit-product/dialog-add-edit-product.component';
 
-export class Product {
+export class Brand {
+  id?: number = 0;
+  name: string = '';
+  creation_timestamp?: Date = new Date();
+  provider_id: number = 0;
+}
+
+export class ProductRequest {
   id?: number = 0;
   name: string = '';
   description: string = '';
   price: number = 0;
   stock: number = 0;
-  brand: string = '';
+  brand_id: number = 0;
   barcode: string = '';
   quantity?: number;
+}
+
+export class ProductResponse {
+  id?: number = 0;
+  name: string = '';
+  description: string = '';
+  price: number = 0;
+  stock: number = 0;
+  brand: Brand = new Brand();
+  barcode: string = '';
+  quantity?: number = 0;
 }
 
 @Component({
@@ -23,7 +41,7 @@ export class Product {
 })
 export class ProductComponent implements OnInit {
 
-  productList: Array<Product> = [];
+  productList: Array<ProductResponse> = [];
 
   filterData = {
     page: 1,
