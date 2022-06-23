@@ -64,6 +64,7 @@ export class DialogAddEditProductComponent implements OnInit {
       );
 
       this.brandFilter = this.oldProduct.brand.name;
+      this.selectedBrand = this.oldProduct.brand;
     });
   }
 
@@ -83,7 +84,8 @@ export class DialogAddEditProductComponent implements OnInit {
       if (this.addProductForm.value.stock !== this.oldProduct.stock)
         await this.setStock(this.addProductForm.value.stock).then(() => changes = true);
 
-      if (this.selectedBrand.id !== this.oldProduct.brand.id)
+      if (this.selectedBrand.id !== this.oldProduct.brand.id &&
+        this.selectedBrand.id !== 0 && this.selectedBrand)
         await this.setBrand(this.selectedBrand.id!).then(() => changes = true);
 
       if (this.addProductForm.value.barcode !== this.oldProduct.barcode)
