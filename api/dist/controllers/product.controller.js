@@ -246,7 +246,7 @@ function setBrand(req, res) {
 exports.setBrand = setBrand;
 function setPriceByBrand(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield database_1.default.query(`SELECT set_price_by_brand(${req.params.id}, ${req.body.percentage})`)
+        yield database_1.default.query(`SELECT set_price_by_brand(${req.body.percentage}, ${req.params.id})`)
             .then(() => {
             res.status(200).json({
                 status: 'OK',

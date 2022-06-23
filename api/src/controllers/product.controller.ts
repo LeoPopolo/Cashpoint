@@ -241,7 +241,7 @@ export async function setBrand(req: Request, res: Response) {
 
 export async function setPriceByBrand(req: Request, res: Response) {
     
-    await conn.query(`SELECT set_price_by_brand(${req.params.id}, ${req.body.percentage})`)
+    await conn.query(`SELECT set_price_by_brand(${req.body.percentage}, ${req.params.id})`)
     .then(() => {
 
         res.status(200).json({

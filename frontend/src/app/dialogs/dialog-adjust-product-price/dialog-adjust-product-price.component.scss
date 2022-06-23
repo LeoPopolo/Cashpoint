@@ -1,0 +1,37 @@
+main {
+  padding: 1em;
+
+  h1 {
+    font-size: 1.3em;
+    text-align: center;
+  }
+
+  >div {
+    margin-top: 10%;
+
+    mat-radio-group {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    div {
+      margin-top: 1em;
+      display: flex;
+      align-items: center;
+
+      input {
+        width: 100%;
+        padding: 1em;
+        font-size: 1.1em;
+        border-bottom: 1px solid #bbb;
+      }
+    }
+  }
+
+  .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

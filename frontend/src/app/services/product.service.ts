@@ -146,4 +146,19 @@ export class ProductService {
 
     return response;
   }
+
+  async setPriceByBrand(brand: Brand, percentage: number) {
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    const body = {
+      percentage: percentage
+    }
+
+    const response: any = await this.httpClient.patch<any>(`${this.endpoint}/api/product/price_by_brand/${brand.id}`, body, {headers: headers}).toPromise();
+
+    return response;
+  }
 }

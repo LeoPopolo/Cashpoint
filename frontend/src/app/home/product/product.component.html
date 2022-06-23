@@ -2,7 +2,10 @@
   <h1>Productos</h1>
 
   <div class="buttons-container">
-    <button (click)="openDialogCreateEditProduct('create')" class="btn-primary"> <mat-icon>add</mat-icon> <span>Nuevo producto</span> </button>
+    <div class="options">
+      <button (click)="openDialogCreateEditProduct('create')" class="btn-primary"> <mat-icon>add</mat-icon> <span>Nuevo producto</span> </button>
+      <button (click)="openDialogAdjustProductStock()" class="btn-settings"> <mat-icon>settings</mat-icon></button>
+    </div>
     <div class="filters" [ngClass]="{'show-filters': filterOpened}">
       <div>
         <input type="text" placeholder="Nombre" [(ngModel)]="filterData.name">

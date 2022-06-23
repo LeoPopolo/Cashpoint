@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogAdjustProductPriceComponent } from 'src/app/dialogs/dialog-adjust-product-price/dialog-adjust-product-price.component';
 import { DialogConfirmComponent } from 'src/app/dialogs/dialog-confirm/dialog-confirm.component';
 import { ProductService } from 'src/app/services/product.service';
 import { DialogAddEditProductComponent } from '../../dialogs/dialog-add-edit-product/dialog-add-edit-product.component';
@@ -131,6 +132,27 @@ export class ProductComponent implements OnInit {
     this.snackbar.open(message, 'OK', {
       duration: 3000,
       panelClass: 'snack-bar-style'
+    });
+  }
+
+  openDialogAdjustProductStock() {
+    const dialogOptions = {
+      width: '350px',
+    }
+
+    const dialogRef = this.dialog.open(DialogAdjustProductPriceComponent, dialogOptions);
+
+    dialogRef.afterClosed().subscribe( async result => {
+
+      if (result) {
+        if (result.anyAction && !result.error) {
+          this.openSnackbar('Precios modificados con éxito');
+        } else if (result.anyAction && result.error) {
+          this.openSnackbar('Se produjo un error al intentar modificar los precios');
+        }
+
+        await this.getProducts();
+      }
     });
   }
 

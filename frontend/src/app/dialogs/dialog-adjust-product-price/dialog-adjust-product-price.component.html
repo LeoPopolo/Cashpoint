@@ -1,0 +1,25 @@
+<main>
+  <h1>Ajuste de precios</h1>
+
+  <div>
+    <mat-select [(ngModel)]="selectedBrand">
+      <mat-option *ngFor="let item of brandList" [value]="item">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
+  </div>
+
+  <div>
+    <mat-radio-group [(ngModel)]="isIncrement">
+      <mat-radio-button [color]="radioButtonColor" [value]="true">Aumento</mat-radio-button>
+      <mat-radio-button [color]="radioButtonColor" [value]="false">Rebaja</mat-radio-button>
+    </mat-radio-group>
+    <div>
+      <label>%</label> <input type="number" placeholder="Porcentaje de ajuste" min="0" [(ngModel)]="percentage">
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button class="btn-primary" (click)="adjustPrice()">Ajustar</button>
+  </div>
+</main>

@@ -13,11 +13,26 @@ main {
     justify-content: space-between;
     margin-top: 3%;
 
-    button {
-      span {
-        display: inline-flex;
-        align-items: center;
-        margin-left: .5em;
+    .options {
+      display: flex;
+      align-items: center;
+
+      button {
+        span {
+          display: inline-flex;
+          align-items: center;
+          margin-left: .5em;
+        }
+      }
+
+      .btn-settings {
+        border-radius: 50%;
+        box-shadow: 1px 1px 5px 0 #bbb;
+        color: var(--primary-color);
+        padding: .7em .8em;
+        margin-left: 1em;
+        background-color: #fff;
+        cursor: pointer;
       }
     }
 

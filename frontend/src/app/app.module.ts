@@ -23,6 +23,7 @@ import { DialogSubstractCashComponent } from './dialogs/dialog-substract-cash/di
 import { DialogCloseCashRegisterComponent } from './dialogs/dialog-close-cash-register/dialog-close-cash-register.component';
 import { DialogSeeOutgoingsComponent } from './dialogs/dialog-see-outgoings/dialog-see-outgoings.component';
 import { DialogAddBrandComponent } from './dialogs/dialog-add-brand/dialog-add-brand.component';
+import { DialogAdjustProductPriceComponent } from './dialogs/dialog-adjust-product-price/dialog-adjust-product-price.component';
 
 registerLocaleData(localeEsAr, 'es-Ar');
 
@@ -40,7 +41,8 @@ registerLocaleData(localeEsAr, 'es-Ar');
     DialogSubstractCashComponent,
     DialogCloseCashRegisterComponent,
     DialogSeeOutgoingsComponent,
-    DialogAddBrandComponent
+    DialogAddBrandComponent,
+    DialogAdjustProductPriceComponent
   ],
   imports: [
     CommonModule,
