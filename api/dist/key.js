@@ -4,7 +4,7 @@ exports.default = {
     database: {
         host: 'localhost',
         port: 5432,
-        user: 'dba',
+        user: 'postgres',
         password: '1234',
         database: 'cashpoint'
     }

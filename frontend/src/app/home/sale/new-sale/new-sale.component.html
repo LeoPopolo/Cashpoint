@@ -29,7 +29,7 @@
 
       <div *ngIf="showFilteredProductList">
         <span *ngFor="let item of filteredProductList" (click)="addToSale(item)">
-          #{{item.id}} {{item.name}} - {{item.description}} | {{item.brand}} ({{item.barcode}})
+          #{{item.id}} {{item.name}} - {{item.description}} | {{item.brand.name}} ({{item.barcode}})
         </span>
       </div>
     </div>
