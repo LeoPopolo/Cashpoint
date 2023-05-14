@@ -93,7 +93,7 @@ export class NewSaleComponent implements OnInit, AfterViewInit {
       width: '350px',
       data: {
         message: `¿Desea volver? La venta se eliminará.`
-      }
+      },
     }
 
     const dialogRef = this.dialog.open(DialogConfirmComponent, dialogOptions);
